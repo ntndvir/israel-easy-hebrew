@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ישראל בעברית קלה | סיורים חווייתיים לעולים</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@300;400;500;700;900&family=Assistant:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    :root {
+      --cream: #FAF5EB; --sand: #EAD9BB; --dark: #1E150A; --dark-2: #2C1E0F;
+      --terra: #C4622D; --terra-deep: #9E4E22; --earth: #8B5E3C;
+      --olive: #4A5E2F; --gold: #D4A843; --gold-light: #EACC70;
+      --text: #1A1209; --text-mid: #5C4030; --text-soft: #8B7060;
+      --radius-lg: 24px; --radius-md: 14px;
+      --pad-section: clamp(5rem, 9vw, 9rem); --container: 1180px;
+    }
+    body { font-family: 'Assistant', sans-serif; background: var(--cream); color: var(--text); direction: rtl; overflow-x: hidden; line-height: 1.6; }
+    .container { max-width: var(--container); margin: 0 auto; padding: 0 clamp(1.5rem, 5vw, 3.5rem); }
+    .label { font-size: .78rem; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--terra); margin-bottom: .75rem; display: block; }
+    .section-title { font-family: 'Frank Ruhl Libre', serif; font-size: clamp(2rem, 4vw, 3.25rem); font-weight: 800; line-height: 1.18; color: var(--text); margin-bottom: 1rem; }
+    .section-sub { font-size: 1.05rem; color: var(--text-mid); line-height: 1.78; max-width: 56ch; }
+    @keyframes fadeUp { from { opacity:0; transform:translateY(26px); } to { opacity:1; transform:translateY(0); } }
+    @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+    @keyframes spinSlow { from { transform:translate(-50%,-50%) rotate(0deg); } to { transform:translate(-50%,-50%) rotate(360deg); } }
+    @keyframes bobArrow { 0%,100% { transform:translateY(0); } 50% { transform:translateY(6px); } }
+    @keyframes shimmer { 0%,100% { opacity:.35; } 50% { opacity:.9; } }
+    .reveal { opacity:0; transform:translateY(28px); transition:opacity .75s ease,transform .75s ease; }
+    .reveal.visible { opacity:1; transform:translateY(0); }
+    .delay-1 { transition-delay:.1s; } .delay-2 { transition-delay:.2s; } .delay-3 { transition-delay:.3s; }
+    /* Navbar */
+    .navbar { position:fixed; top:0; right:0; left:0; z-index:100; padding:1.25rem 0; transition:background .4s,padding .4s,box-shadow .4s; }
+    .navbar.scrolled { background:rgba(30,21,10,.94); backdrop-filter:blur(14px); padding:.875rem 0; box-shadow:0 2px 24px rgba(0,0,0,.25); }
+    .nav-inner { display:flex; align-items:center; justify-content:space-between; }
+    .nav-logo { font-family:'Frank Ruhl Libre',serif; font-size:1.2rem; font-weight:700; color:var(--gold-light); text-decoration:none; }
+    .nav-logo small { color:rgba(255,255,255,.5); font-weight:300; font-size:.78em; margin-right:.4rem; }
+    .nav-cta { background:var(--terra); color:#fff; padding:.6rem 1.5rem; border-radius:100px; font-family:'Assistant',sans-serif; font-size:.9rem; font-weight:700; text-decoration:none; transition:background .2s,transform .2s; box-shadow:0 4px 16px rgba(196,98,45,.3); }
+    .nav-cta:hover { background:var(--terra-deep); transform:translateY(-1px); }
+    /* Hero */
+    .hero { min-height:100vh; background:var(--dark); position:relative; display:flex; align-items:center; justify-content:center; overflow:hidden; }
+    .hero::before { content:''; position:absolute; inset:0; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E"); opacity:.055; pointer-events:none; z-index:1; }
+    .hero::after { content:''; position:absolute; inset:0; background:radial-gradient(ellipse 65% 55% at 80% 25%, rgba(196,98,45,.2) 0%,transparent 65%),radial-gradient(ellipse 45% 55% at 10% 75%, rgba(74,94,47,.14) 0%,transparent 60%),radial-gradient(ellipse 55% 40% at 50% 105%, rgba(212,168,67,.12) 0%,transparent 60%); pointer-events:none; z-index:1; }
+    .hero-word { position:absolute; top:50%; left:50%; transform:translate(-50%,-52%); font-family:'Frank Ruhl Libre',serif; font-size:clamp(16rem,30vw,30rem); font-weight:900; color:transparent; -webkit-text-stroke:1px rgba(212,168,67,.09); pointer-events:none; user-select:none; z-index:1; white-space:nowrap; }
+    .ring { position:absolute; border-radius:50%; border:1px solid; pointer-events:none; z-index:1; top:50%; left:50%; }
+    .ring-1 { width:560px; height:560px; border-color:rgba(212,168,67,.1); animation:spinSlow 70s linear infinite; }
+    .ring-2 { width:860px; height:860px; border-color:rgba(196,98,45,.07); animation:spinSlow 100s linear infinite reverse; }
+    .ring-3 { width:1160px; height:1160px; border-color:rgba(212,168,67,.04); }
+    .ring::before { content:''; position:absolute; top:-4px; right:-4px; width:8px; height:8px; background:var(--gold); border-radius:50%; animation:shimmer 3s ease infinite; }
+    .hero-content { position:relative; z-index:2; text-align:center; padding:9rem 0 7rem; max-width:820px; }
+    .hero-eyebrow { display:inline-flex; align-items:center; gap:.875rem; font-size:.8rem; font-weight:700; letter-spacing:.18em; text-transform:uppercase; color:var(--gold); margin-bottom:1.75rem; opacity:0; animation:fadeUp .8s ease .3s forwards; }
+    .hero-eyebrow::before,.hero-eyebrow::after { content:''; width:2.5rem; height:1px; background:var(--gold); opacity:.5; }
+    .hero-title { font-family:'Frank Ruhl Libre',serif; font-size:clamp(2.75rem,6.5vw,5.5rem); font-weight:900; color:#fff; line-height:1.1; margin-bottom:1.5rem; opacity:0; animation:fadeUp .9s ease .5s forwards; }
+    .hero-title .accent { color:var(--gold-light); }
+    .hero-subtitle { font-size:clamp(1rem,1.8vw,1.175rem); color:rgba(255,255,255,.6); line-height:1.8; max-width:58ch; margin:0 auto 2.75rem; opacity:0; animation:fadeUp .9s ease .7s forwards; }
+    .hero-cta-wrap { display:flex; gap:1rem; justify-content:center; flex-wrap:wrap; opacity:0; animation:fadeUp .9s ease .9s forwards; }
+    .btn-primary { background:var(--terra); color:#fff; padding:.95rem 2.25rem; border-radius:100px; font-family:'Assistant',sans-serif; font-size:1.05rem; font-weight:700; text-decoration:none; display:inline-flex; align-items:center; gap:.5rem; transition:all .25s ease; box-shadow:0 8px 28px rgba(196,98,45,.38); }
+    .btn-primary:hover { background:#d26e35; transform:translateY(-2px); }
+    .btn-ghost { background:transparent; color:rgba(255,255,255,.75); padding:.95rem 2.25rem; border-radius:100px; border:1.5px solid rgba(255,255,255,.22); font-family:'Assistant',sans-serif; font-size:1.05rem; font-weight:600; text-decoration:none; transition:all .25s ease; }
+    .btn-ghost:hover { border-color:rgba(255,255,255,.55); color:#fff; background:rgba(255,255,255,.07); }
+    .scroll-cue { position:absolute; bottom:2.5rem; left:50%; transform:translateX(-50%); z-index:2; display:flex; flex-direction:column; align-items:center; gap:.625rem; opacity:0; animation:fadeIn 1s ease 1.4s forwards; }
+    .scroll-cue span { font-size:.72rem; color:rgba(255,255,255,.35); letter-spacing:.12em; text-transform:uppercase; }
+    .scroll-cue-arrow { width:1px; height:2.75rem; background:linear-gradient(to bottom,rgba(255,255,255,.35),transparent); animation:bobArrow 2s ease infinite; }
+    .wave { line-height:0; } .wave svg { display:block; width:100%; }
+    /* Problem/Solution */
+    .section-problem { padding:var(--pad-section) 0; background:var(--cream); }
+    .problem-grid { display:grid; grid-template-columns:1fr 1fr; gap:clamp(2.5rem,5vw,5rem); align-items:center; margin-top:clamp(2.5rem,5vw,4.5rem); }
+    .problem-cards { display:flex; flex-direction:column; gap:1.25rem; }
+    .p-card { background:#fff; border-radius:var(--radius-lg); padding:2rem 2.25rem; box-shadow:0 3px 32px rgba(44,30,15,.07); border:1px solid rgba(44,30,15,.06); position:relative; overflow:hidden; transition:transform .3s,box-shadow .3s; }
+    .p-card:hover { transform:translateY(-3px); box-shadow:0 8px 40px rgba(44,30,15,.11); }
+    .p-card::before { content:''; position:absolute; top:0; right:0; width:4px; height:100%; background:linear-gradient(to bottom,var(--terra),var(--gold)); }
+    .p-card-icon { width:50px; height:50px; background:linear-gradient(135deg,var(--terra),var(--earth)); border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:1.5rem; margin-bottom:1rem; }
+    .p-card h3 { font-size:1.2rem; color:var(--text); margin-bottom:.5rem; font-weight:700; }
+    .p-card p { color:var(--text-mid); line-height:1.7; font-size:.96rem; }
+    .big-statement { font-family:'Frank Ruhl Libre',serif; font-size:clamp(1.7rem,3vw,2.6rem); font-weight:700; color:var(--text); line-height:1.35; margin-bottom:2rem; }
+    .big-statement em { color:var(--terra); font-style:normal; }
+    .sol-feature { display:flex; align-items:flex-start; gap:1rem; margin-bottom:1.125rem; }
+    .sol-dot { width:8px; height:8px; min-width:8px; background:var(--terra); border-radius:50%; margin-top:.55rem; }
+    .sol-feature p { color:var(--text-mid); line-height:1.7; font-size:1rem; }
+    /* Benefits */
+    .section-benefits { padding:var(--pad-section) 0; background:var(--dark); position:relative; overflow:hidden; }
+    .section-benefits::before { content:''; position:absolute; inset:0; background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E"); opacity:.04; pointer-events:none; }
+    .section-benefits::after { content:''; position:absolute; inset:0; background:radial-gradient(ellipse 55% 50% at 90% 30%,rgba(196,98,45,.14) 0%,transparent 65%),radial-gradient(ellipse 40% 45% at 5% 70%,rgba(74,94,47,.1) 0%,transparent 60%); pointer-events:none; }
+    .benefits-header { text-align:center; margin-bottom:4rem; position:relative; z-index:2; }
+    .benefits-header .label { color:var(--gold); }
+    .benefits-header .section-title { color:#fff; margin:0 auto 1rem; max-width:26ch; }
+    .benefits-header .section-sub { color:rgba(255,255,255,.5); margin:0 auto; }
+    .benefits-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1.5rem; position:relative; z-index:2; }
+    .b-card { background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.1); border-radius:var(--radius-lg); padding:2.25rem; transition:all .3s ease; position:relative; overflow:hidden; }
+    .b-card::before { content:''; position:absolute; inset:0; background:linear-gradient(135deg,rgba(196,98,45,.09),transparent); opacity:0; transition:opacity .3s ease; border-radius:inherit; }
+    .b-card:hover { border-color:rgba(196,98,45,.42); transform:translateY(-5px); box-shadow:0 16px 40px rgba(0,0,0,.25); }
+    .b-card:hover::before { opacity:1; }
+    .b-icon { font-size:2.25rem; margin-bottom:1.25rem; display:block; }
+    .b-card h3 { font-size:1.15rem; color:#fff; margin-bottom:.7rem; font-weight:700; }
+    .b-card p { color:rgba(255,255,255,.52); font-size:.94rem; line-height:1.72; }
+    .b-tag { display:inline-block; margin-top:1.25rem; font-size:.78rem; font-weight:700; letter-spacing:.05em; color:var(--gold); padding:.3rem 1rem; border-radius:100px; background:rgba(212,168,67,.1); border:1px solid rgba(212,168,67,.22); }
+    /* Gallery */
+    .section-gallery { padding:var(--pad-section) 0; background:var(--sand); }
+    .gallery-header { text-align:center; margin-bottom:3rem; }
+    .gallery-mosaic { display:grid; grid-template-columns:repeat(12,1fr); grid-auto-rows:180px; gap:.875rem; }
+    .g-item { border-radius:var(--radius-md); overflow:hidden; background:rgba(139,94,60,.12); position:relative; cursor:pointer; transition:transform .3s,box-shadow .3s; }
+    .g-item:hover { transform:scale(1.015); box-shadow:0 12px 40px rgba(44,30,15,.2); z-index:2; }
+    .g-item:nth-child(1) { grid-column:span 7; grid-row:span 2; }
+    .g-item:nth-child(2) { grid-column:span 5; } .g-item:nth-child(3) { grid-column:span 5; }
+    .g-item:nth-child(4) { grid-column:span 4; } .g-item:nth-child(5) { grid-column:span 4; } .g-item:nth-child(6) { grid-column:span 4; }
+    .g-placeholder { width:100%; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:.625rem; background:linear-gradient(135deg,rgba(196,98,45,.14) 0%,rgba(74,94,47,.1) 60%,rgba(212,168,67,.1) 100%); }
+    .g-placeholder-icon { font-size:2rem; opacity:.45; }
+    .g-placeholder span { font-size:.8rem; color:var(--earth); opacity:.65; font-weight:600; }
+    /* About */
+    .section-about { padding:var(--pad-section) 0; background:var(--cream); }
+    .about-grid { display:grid; grid-template-columns:5fr 6fr; gap:clamp(3rem,6vw,6rem); align-items:center; }
+    .about-img-wrap { position:relative; }
+    .about-photo-ph { width:100%; aspect-ratio:3/4; border-radius:var(--radius-lg); background:linear-gradient(160deg,var(--sand) 30%,rgba(196,98,45,.18) 100%); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:1rem; }
+    .about-photo-ph .icon { font-size:4rem; opacity:.3; }
+    .about-photo-ph .ph-text { font-size:.875rem; color:var(--text-soft); }
+    .about-badge { position:absolute; bottom:-1.5rem; left:-1.5rem; background:var(--terra); color:#fff; padding:1.375rem 1.625rem; border-radius:20px; box-shadow:0 8px 32px rgba(196,98,45,.38); text-align:center; line-height:1.2; }
+    .about-badge .num { font-family:'Frank Ruhl Libre',serif; font-size:2.4rem; font-weight:900; display:block; }
+    .about-badge .lbl { font-size:.78rem; opacity:.88; font-weight:600; }
+    .about-name { font-family:'Frank Ruhl Libre',serif; font-size:1.5rem; font-weight:800; color:var(--terra); margin-bottom:.4rem; }
+    .about-role { color:var(--text-soft); font-size:.95rem; margin-bottom:1.5rem; }
+    .about-desc { color:var(--text-mid); line-height:1.82; font-size:1.025rem; margin-bottom:1.625rem; }
+    .about-tags { display:flex; flex-wrap:wrap; gap:.625rem; }
+    .a-tag { font-size:.875rem; font-weight:600; padding:.4rem 1.125rem; border-radius:100px; background:rgba(196,98,45,.09); color:var(--terra); border:1px solid rgba(196,98,45,.2); }
+    /* Testimonials */
+    .section-testimonials { padding:var(--pad-section) 0; background:linear-gradient(180deg,var(--cream) 0%,var(--sand) 100%); }
+    .testimonials-header { text-align:center; margin-bottom:3.5rem; }
+    .testimonials-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1.5rem; }
+    .t-card { background:#fff; border-radius:var(--radius-lg); padding:2.25rem; box-shadow:0 2px 24px rgba(44,30,15,.07); border:1px solid rgba(44,30,15,.07); position:relative; transition:transform .3s,box-shadow .3s; }
+    .t-card:hover { transform:translateY(-4px); box-shadow:0 10px 36px rgba(44,30,15,.12); }
+    .t-card::before { content:'"'; position:absolute; top:1rem; left:1.5rem; font-family:'Frank Ruhl Libre',serif; font-size:6rem; color:var(--terra); opacity:.1; line-height:1; }
+    .t-card.placeholder { border-style:dashed; background:rgba(44,30,15,.025); }
+    .t-placeholder-inner { display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:180px; text-align:center; gap:.75rem; }
+    .t-placeholder-inner .icon { font-size:2rem; opacity:.3; }
+    .t-placeholder-inner p { font-size:.875rem; color:var(--text-soft); font-style:italic; }
+    /* Contact */
+    .section-contact { padding:var(--pad-section) 0; background:var(--dark); position:relative; overflow:hidden; }
+    .section-contact::before { content:''; position:absolute; inset:0; background:radial-gradient(ellipse 55% 60% at 90% 35%,rgba(196,98,45,.16) 0%,transparent 65%),radial-gradient(ellipse 40% 50% at 5% 65%,rgba(74,94,47,.12) 0%,transparent 60%); pointer-events:none; }
+    .contact-grid { display:grid; grid-template-columns:1fr 1fr; gap:clamp(3rem,6vw,6rem); align-items:start; position:relative; z-index:2; }
+    .contact-info .label { color:var(--gold); }
+    .contact-info .section-title { color:#fff; }
+    .contact-info .section-sub { color:rgba(255,255,255,.5); margin-bottom:2.5rem; }
+    .contact-details { display:flex; flex-direction:column; gap:.875rem; }
+    .c-item { display:flex; align-items:center; gap:1rem; color:rgba(255,255,255,.72); font-size:1.025rem; }
+    .c-icon { width:46px; height:46px; min-width:46px; background:rgba(255,255,255,.08); border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:1.3rem; }
+    .c-item a { color:inherit; text-decoration:none; transition:color .2s; }
+    .c-item a:hover { color:var(--gold-light); }
+    .contact-form { background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12); border-radius:var(--radius-lg); padding:2.5rem; }
+    .form-title { font-family:'Frank Ruhl Libre',serif; font-size:1.45rem; color:#fff; font-weight:700; margin-bottom:1.75rem; }
+    .form-group { margin-bottom:1.125rem; }
+    .form-row { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+    .form-label { display:block; font-size:.84rem; font-weight:600; color:rgba(255,255,255,.65); margin-bottom:.45rem; }
+    .form-input,.form-textarea,.form-select { width:100%; background:rgba(255,255,255,.07); border:1.5px solid rgba(255,255,255,.14); border-radius:12px; padding:.8rem 1.1rem; color:#fff; font-family:'Assistant',sans-serif; font-size:1rem; direction:rtl; text-align:right; outline:none; transition:border-color .2s,background .2s; }
+    .form-input::placeholder,.form-textarea::placeholder { color:rgba(255,255,255,.28); }
+    .form-input:focus,.form-textarea:focus,.form-select:focus { border-color:rgba(196,98,45,.6); background:rgba(255,255,255,.1); }
+    .form-textarea { min-height:100px; resize:vertical; }
+    .form-select { cursor:pointer; appearance:none; }
+    .form-select option { background:#2C1E0F; color:#fff; }
+    .btn-submit { width:100%; background:var(--terra); color:#fff; border:none; padding:1rem; border-radius:12px; font-family:'Assistant',sans-serif; font-size:1.05rem; font-weight:700; cursor:pointer; transition:all .25s ease; margin-top:.5rem; }
+    .btn-submit:hover { background:#d26e35; transform:translateY(-1px); }
+    .footer-bar { background:rgba(0,0,0,.35); border-top:1px solid rgba(255,255,255,.07); padding:1.375rem 0; }
+    .footer-inner { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem; }
+    .f-logo { font-family:'Frank Ruhl Libre',serif; font-size:1.05rem; color:rgba(255,255,255,.45); }
+    .f-copy { font-size:.8rem; color:rgba(255,255,255,.28); }
+    .wa-float { position:fixed; bottom:2rem; left:2rem; z-index:80; width:60px; height:60px; background:#25D366; border-radius:50%; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 24px rgba(37,211,102,.42); text-decoration:none; transition:transform .25s,box-shadow .25s; }
+    .wa-float:hover { transform:scale(1.09); }
+    .wa-float svg { width:30px; height:30px; fill:#fff; }
+    @media (max-width:960px) {
+      .problem-grid,.about-grid,.contact-grid { grid-template-columns:1fr; gap:3rem; }
+      .benefits-grid { grid-template-columns:1fr 1fr; }
+      .testimonials-grid { grid-template-columns:1fr 1fr; }
+      .g-item:nth-child(1) { grid-column:span 12; }
+      .g-item:nth-child(2),.g-item:nth-child(3) { grid-column:span 6; }
+      .g-item:nth-child(4),.g-item:nth-child(5),.g-item:nth-child(6) { grid-column:span 4; }
+    }
+    @media (max-width:640px) {
+      .benefits-grid,.testimonials-grid,.form-row { grid-template-columns:1fr; }
+      .g-item { grid-column:span 12 !important; }
+      .hero-cta-wrap { flex-direction:column; align-items:center; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar" id="navbar">
+    <div class="container">
+      <div class="nav-inner">
+        <a href="#" class="nav-logo">&#1497;&#1513;&#1512;&#1488;&#1500; &#1489;&#1506;&#1489;&#1512;&#1497;&#1514; &#1511;&#1500;&#1492;<small>| &#1505;&#1497;&#1493;&#1512;&#1497;&#1501; &#1495;&#1493;&#1493;&#1497;&#1497;&#1514;&#1497;&#1497;&#1501;</small></a>
+        <a href="#contact" class="nav-cta">&#1500;&#1514;&#1497;&#1488;&#1493;&#1501; &#1505;&#1497;&#1493;&#1512;</a>
+      </div>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-word" aria-hidden="true">&#1513;&#1508;&#1492;</div>
+    <div class="ring ring-1" aria-hidden="true"></div>
+    <div class="ring ring-2" aria-hidden="true"></div>
+    <div class="ring ring-3" aria-hidden="true"></div>
+    <div class="container">
+      <div class="hero-content">
+        <div class="hero-eyebrow">&#1505;&#1497;&#1493;&#1512;&#1497;&#1501; &#1495;&#1493;&#1493;&#1497;&#1497;&#1514;&#1497;&#1497;&#1501; &#1500;&#1506;&#1493;&#1500;&#1497;&#1501; &#1495;&#1491;&#1513;&#1497;&#1501;</div>
+        <h1 class="hero-title">&#1502;&#1495;&#1489;&#1512;&#1497;&#1501; &#1488;&#1514; &#1492;&#1506;&#1493;&#1500;&#1497;&#1501; &#1500;&#1488;&#1512;&#1509;<br />&#1491;&#1512;&#1498; <span class="accent">&#1492;&#1513;&#1508;&#1492;</span></h1>
+        <p class="hero-subtitle">&#1508;&#1514;&#1512;&#1493;&#1503; &#1508;&#1491;&#1490;&#1493;&#1490;&#1497; &#1497;&#1497;&#1495;&#1493;&#1491;&#1497; &#1500;&#1512;&#1499;&#1494;&#1497; &#1511;&#1492;&#1497;&#1500;&#1492; &#1493;&#1502;&#1504;&#1492;&#1500;&#1497; &#1488;&#1493;&#1500;&#1508;&#1504;&#1497;&#1501;: &#1513;&#1497;&#1500;&#1493;&#1489; &#1489;&#1497;&#1503; &#1497;&#1491;&#1497;&#1506;&#1514; &#1492;&#1488;&#1512;&#1509; &#1500;&#1514;&#1512;&#1490;&#1493;&#1500; &#1513;&#1508;&#1492; &#1489;&#1513;&#1496;&#1495;, &#1492;&#1502;&#1493;&#1514;&#1488;&#1501; &#1500;&#1512;&#1502;&#1514; &#1488;&#1493;&#1500;&#1508;&#1503; &#1488;&#39; &#1493;&#1502;&#1506;&#1500;&#1492;.</p>
+        <div class="hero-cta-wrap">
+          <a href="#contact" class="btn-primary">&#10022; &#1500;&#1514;&#1497;&#1488;&#1493;&#1501; &#1505;&#1497;&#1493;&#1512; &#1500;&#1511;&#1489;&#1493;&#1510;&#1492; &#1513;&#1500;&#1499;&#1501;</a>
+          <a href="#about" class="btn-ghost">&#1506;&#1500; &#1490;&#1500;&#1497; &#1489;&#1504;&#1497;&#1503;</a>
+        </div>
+      </div>
+    </div>
+    <div class="scroll-cue" aria-hidden="true">
+      <span>&#1492;&#1502;&#1513;&#1498; &#1500;&#1490;&#1500;&#1493;&#1500;</span>
+      <div class="scroll-cue-arrow"></div>
+    </div>
+  </section>
+
+  <div class="wave"><svg viewBox="0 0 1440 60" preserveAspectRatio="none" fill="#FAF5EB" xmlns="http://www.w3.org/2000/svg"><path d="M0,60 C360,0 1080,80 1440,20 L1440,60 Z"/></svg></div>
+
+  <section class="section-problem">
+    <div class="container">
+      <div class="reveal">
+        <span class="label">&#1492;&#1510;&#1493;&#1512;&#1498; &#1493;&#1492;&#1508;&#1514;&#1512;&#1493;&#1503;</span>
+        <h2 class="section-title">&#1500;&#1502;&#1492; &#1506;&#1489;&#1512;&#1497;&#1514; &#1511;&#1500;&#1492; &#1489;&#1513;&#1496;&#1495;?</h2>
+        <p class="section-sub">&#1511;&#1500;&#1497;&#1496;&#1492; &#1502;&#1493;&#1510;&#1500;&#1495;&#1514; &#1502;&#1495;&#1497;&#1497;&#1489;&#1514; &#1513;&#1504;&#1497;&#1497;&#1501;: &#1513;&#1500;&#1497;&#1496;&#1492; &#1489;&#1513;&#1508;&#1492; &#1493;&#1495;&#1497;&#1489;&#1493;&#1512; &#1512;&#1490;&#1513;&#1497; &#1500;&#1488;&#1512;&#1509;. &#1492;&#1505;&#1497;&#1493;&#1512;&#1497;&#1501; &#1513;&#1500;&#1504;&#1493; &#1506;&#1493;&#1513;&#1497;&#1501; &#1488;&#1514; &#1513;&#1504;&#1497;&#1492;&#1501; &#1489;&#1489;&#1514; &#1488;&#1495;&#1514;.</p>
+      </div>
+      <div class="problem-grid">
+        <div class="problem-cards">
+          <div class="p-card reveal delay-1">
+            <div class="p-card-icon">&#127963;</div>
+            <h3>&#1502;&#1495;&#1493;&#1509; &#1500;&#1499;&#1497;&#1514;&#1492; &#8212; &#1488;&#1500; &#1492;&#1513;&#1496;&#1495;</h3>
+            <p>&#1492;&#1506;&#1493;&#1500;&#1497;&#1501; &#1500;&#1493;&#1502;&#1491;&#1497;&#1501; &#1506;&#1489;&#1512;&#1497;&#1514; &#1489;&#1499;&#1497;&#1514;&#1492;, &#1488;&#1498; &#1514;&#1512;&#1490;&#1493;&#1500; &#1488;&#1502;&#1497;&#1514;&#1497; &#1511;&#1493;&#1512;&#1492; &#1499;&#1513;&#1492;&#1513;&#1508;&#1492; &#1504;&#1508;&#1490;&#1513;&#1514; &#1506;&#1501; &#1492;&#1502;&#1510;&#1497;&#1488;&#1493;&#1514;. &#1492;&#1505;&#1497;&#1493;&#1512; &#1492;&#1493;&#1488; &#1492;&#1499;&#1497;&#1514;&#1492;.</p>
+          </div>
+          <div class="p-card reveal delay-2">
+            <div class="p-card-icon">&#127807;</div>
+            <h3>&#1492;&#1514;&#1488;&#1502;&#1492; &#1488;&#1497;&#1513;&#1497;&#1514; &#1500;&#1499;&#1500; &#1511;&#1489;&#1493;&#1510;&#1492;</h3>
+            <p>&#1505;&#1497;&#1493;&#1512;&#1497;&#1501; &#1506;&#1497;&#1512;&#1493;&#1504;&#1497;&#1497;&#1501;, &#1492;&#1497;&#1505;&#1496;&#1493;&#1512;&#1497;&#1497;&#1501; &#1493;&#1505;&#1497;&#1493;&#1512;&#1497; &#1496;&#1489;&#1506; &#1489;&#1488;&#1494;&#1493;&#1512; &#1492;&#1502;&#1512;&#1499;&#1494; &#1493;&#1513;&#1508;&#1500;&#1514; &#1497;&#1492;&#1493;&#1491;&#1492; &#8212; &#1502;&#1493;&#1514;&#1488;&#1502;&#1497;&#1501; &#1500;&#1510;&#1512;&#1499;&#1497; &#1492;&#1511;&#1489;&#1493;&#1510;&#1492; &#1513;&#1500;&#1499;&#1501;.</p>
+          </div>
+          <div class="p-card reveal delay-3">
+            <div class="p-card-icon">&#128483;</div>
+            <h3>&#1502;&#1493;&#1514;&#1488;&#1501; &#1500;&#1512;&#1502;&#1514; &#1488;&#1493;&#1500;&#1508;&#1503; &#1488;&#39; &#1493;&#1502;&#1506;&#1500;&#1492;</h3>
+            <p>&#1499;&#1500; &#1492;&#1505;&#1497;&#1493;&#1512;&#1497;&#1501; &#1489;&#1504;&#1493;&#1497;&#1497;&#1501; &#1506;&#1501; &#1513;&#1508;&#1492; &#1508;&#1513;&#1493;&#1496;&#1492;, &#1502;&#1497;&#1500;&#1493;&#1514; &#1502;&#1508;&#1514;&#1495;, &#1513;&#1488;&#1500;&#1493;&#1514; &#1502;&#1504;&#1495;&#1493;&#1514; &#1493;&#1495;&#1493;&#1502;&#1512;&#1497;&#1501; &#1495;&#1494;&#1493;&#1514;&#1497;&#1497;&#1501; &#8212; &#1499;&#1491;&#1497; &#1513;&#1499;&#1493;&#1500;&#1501; &#1497;&#1489;&#1497;&#1504;&#1493;.</p>
+          </div>
+        </div>
+        <div class="solution-side reveal delay-2">
+          <div class="big-statement">&#1502;&#1506;&#1489;&#1512; &#1502;&#1492;&#1499;&#1497;&#1514;&#1492; &#1500;&#1513;&#1496;&#1495; &#8212;<br /><em>&#1492;&#1496;&#1497;&#1493;&#1500; &#1492;&#1493;&#1488; &#1513;&#1497;&#1506;&#1493;&#1512; &#1506;&#1489;&#1512;&#1497;&#1514;.</em></div>
+          <div class="sol-feature"><div class="sol-dot"></div><p><strong>&#1495;&#1493;&#1493;&#1497;&#1497;&#1492; &#1502;&#1513;&#1493;&#1500;&#1489;&#1514;:</strong> &#1513;&#1497;&#1500;&#1493;&#1489; &#1502;&#1491;&#1493;&#1497;&#1511; &#1489;&#1497;&#1503; &#1513;&#1497;&#1506;&#1493;&#1512; &#1506;&#1489;&#1512;&#1497;&#1514; &#1488;&#1497;&#1504;&#1496;&#1512;&#1488;&#1511;&#1496;&#1497;&#1489;&#1497; &#1500;&#1495;&#1493;&#1493;&#1497;&#1497;&#1492; &#1514;&#1497;&#1497;&#1512;&#1493;&#1514;&#1497;&#1514; &#1506;&#1513;&#1497;&#1512;&#1492;.</p></div>
+          <div class="sol-feature"><div class="sol-dot"></div><p><strong>&#1490;&#1497;&#1489;&#1493;&#1513; &#1493;&#1513;&#1497;&#1497;&#1499;&#1493;&#1514;:</strong> &#1492;&#1505;&#1497;&#1493;&#1512; &#1502;&#1495;&#1489;&#1512; &#1506;&#1493;&#1500;&#1497;&#1501; &#1502;&#1512;&#1511;&#1506;&#1497;&#1501; &#1513;&#1493;&#1504;&#1497;&#1501; &#1505;&#1489;&#1497;&#1489; &#1513;&#1508;&#1492; &#1488;&#1495;&#1514; &#1493;&#1502;&#1512;&#1495;&#1489; &#1502;&#1513;&#1493;&#1514;&#1507;.</p></div>
+          <div class="sol-feature"><div class="sol-dot"></div><p><strong>&#1514;&#1512;&#1490;&#1493;&#1500; &#1495;&#1497;:</strong> &#1502;&#1493;&#1504;&#1495;&#1497;&#1501;, &#1513;&#1488;&#1500;&#1493;&#1514; &#1493;&#1513;&#1497;&#1495;&#1493;&#1514; &#1489;&#1513;&#1496;&#1495; &#1513;&#1502;&#1514;&#1512;&#1490;&#1502;&#1497;&#1501; &#1500;&#1494;&#1499;&#1512;&#1493;&#1503; &#1488;&#1512;&#1493;&#1498; &#1496;&#1493;&#1493;&#1495;.</p></div>
+          <div class="sol-feature"><div class="sol-dot"></div><p><strong>&#1497;&#1491;&#1497;&#1506;&#1514; &#1492;&#1488;&#1512;&#1509;:</strong> &#1492;&#1497;&#1505;&#1496;&#1493;&#1512;&#1497;&#1492;, &#1490;&#1488;&#1493;&#1490;&#1512;&#1508;&#1497;&#1492; &#1493;&#1514;&#1512;&#1489;&#1493;&#1514; &#1497;&#1513;&#1512;&#1488;&#1500; &#8212; &#1489;&#1490;&#1493;&#1489;&#1492; &#1492;&#1506;&#1497;&#1504;&#1497;&#1497;&#1501; &#1493;&#1489;&#1513;&#1508;&#1492; &#1508;&#1513;&#1493;&#1496;&#1492;.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="wave" style="background:var(--cream);"><svg viewBox="0 0 1440 60" preserveAspectRatio="none" fill="#1E150A" xmlns="http://www.w3.org/2000/svg"><path d="M0,0 C480,60 960,0 1440,50 L1440,60 L0,60 Z"/></svg></div>
+
+  <section class="section-benefits">
+    <div class="container">
+      <div class="benefits-header reveal">
+        <span class="label">&#1506;&#1512;&#1498; &#1502;&#1493;&#1505;&#1507; &#1500;&#1512;&#1499;&#1494; &#1492;&#1511;&#1492;&#1497;&#1500;&#1492;</span>
+        <h2 class="section-title">&#1500;&#1502;&#1492; &#1500;&#1489;&#1495;&#1493;&#1512; &#1489;&#1505;&#1497;&#1493;&#1512;&#1497; &#1506;&#1489;&#1512;&#1497;&#1514; &#1511;&#1500;&#1492;?</h2>
+        <p class="section-sub">&#1508;&#1504;&#1497;&#1497;&#1492; &#1497;&#1513;&#1497;&#1512;&#1492; &#1500;&#1512;&#1499;&#1494;&#1497; &#1511;&#1500;&#1497;&#1496;&#1492; &#1493;&#1502;&#1504;&#1492;&#1500;&#1497; &#1488;&#1493;&#1500;&#1508;&#1504;&#1497;&#1501; &#8212; &#1492;&#1497;&#1514;&#1512;&#1493;&#1504;&#1493;&#1514; &#1513;&#1497;&#1510;&#1491;&#1497;&#1511;&#1493; &#1488;&#1514; &#1492;&#1489;&#1495;&#1497;&#1512;&#1492;.</p>
+      </div>
+      <div class="benefits-grid">
+        <div class="b-card reveal delay-1"><span class="b-icon">&#127757;</span><h3>&#1490;&#1497;&#1489;&#1493;&#1513; &#1512;&#1489;-&#1514;&#1512;&#1489;&#1493;&#1514;&#1497;</h3><p>&#1508;&#1500;&#1496;&#1508;&#1493;&#1512;&#1502;&#1492; &#1492;&#1502;&#1488;&#1508;&#1513;&#1512;&#1514; &#1500;&#1495;&#1489;&#1512; &#1506;&#1493;&#1500;&#1497;&#1501; &#1502;&#1502;&#1491;&#1497;&#1504;&#1493;&#1514; &#1513;&#1493;&#1504;&#1493;&#1514; &#1505;&#1489;&#1497;&#1489; &#1513;&#1508;&#1492; &#1502;&#1513;&#1493;&#1514;&#1508;&#1514; &#1488;&#1495;&#1514; &#8212; &#1506;&#1489;&#1512;&#1497;&#1514;. &#1492;&#1505;&#1497;&#1493;&#1512; &#1492;&#1493;&#1508;&#1498; &#1500;&#1495;&#1493;&#1493;&#1497;&#1497;&#1492; &#1502;&#1488;&#1495;&#1491;&#1514;.</p><span class="b-tag">&#1513;&#1497;&#1497;&#1499;&#1493;&#1514;</span></div>
+        <div class="b-card reveal delay-2"><span class="b-icon">&#128176;</span><h3>&#1497;&#1506;&#1497;&#1500;&#1493;&#1514; &#1514;&#1511;&#1510;&#1497;&#1489;&#1497;&#1514;</h3><p>&#1489;&#1502;&#1511;&#1493;&#1501; &#1500;&#1492;&#1494;&#1502;&#1497;&#1503; &#1502;&#1491;&#1512;&#1497;&#1499;&#1497;&#1501; &#1489;&#1513;&#1508;&#1493;&#1514; &#1513;&#1493;&#1504;&#1493;&#1514; &#8212; &#1505;&#1497;&#1493;&#1512; &#1488;&#1495;&#1491; &#1489;&#1506;&#1489;&#1512;&#1497;&#1514; &#1511;&#1500;&#1492; &#1502;&#1514;&#1488;&#1497;&#1501; &#1500;&#1499;&#1493;&#1500;&#1501;. &#1495;&#1497;&#1505;&#1499;&#1493;&#1503; &#1513;&#1500; &#1502;&#1513;&#1488;&#1489;&#1497;&#1501; &#1500;&#1510;&#1491; &#1506;&#1512;&#1498; &#1495;&#1497;&#1504;&#1493;&#1499;&#1497; &#1502;&#1493;&#1490;&#1489;&#1512;.</p><span class="b-tag">&#1495;&#1497;&#1505;&#1499;&#1493;&#1503; &#1489;&#1514;&#1511;&#1510;&#1497;&#1489;</span></div>
+        <div class="b-card reveal delay-3"><span class="b-icon">&#11088;</span><h3>&#1489;&#1497;&#1496;&#1495;&#1493;&#1503; &#1506;&#1510;&#1502;&#1497; &#1500;&#1506;&#1493;&#1500;&#1492;</h3><p>&#1492;&#1506;&#1493;&#1500;&#1497;&#1501; &#1490;&#1500;&#1497;&#1501; &#1513;&#1492;&#1501; &#1502;&#1505;&#1493;&#1490;&#1500;&#1497;&#1501; &#1500;&#1492;&#1489;&#1497;&#1503; &#1493;&#1500;&#1491;&#1489;&#1512; &#1506;&#1489;&#1512;&#1497;&#1514; &#1490;&#1501; &#1502;&#1495;&#1493;&#1509; &#1500;&#1499;&#1497;&#1514;&#1492; &#8212; &#1489;&#1497;&#1496;&#1495;&#1493;&#1503; &#1513;&#1502;&#1513;&#1508;&#1497;&#1506; &#1506;&#1500; &#1499;&#1500; &#1514;&#1492;&#1500;&#1497;&#1498; &#1492;&#1511;&#1500;&#1497;&#1496;&#1492;.</p><span class="b-tag">&#1502;&#1493;&#1496;&#1497;&#1489;&#1510;&#1497;&#1492;</span></div>
+        <div class="b-card reveal delay-1"><span class="b-icon">&#128205;</span><h3>&#1492;&#1497;&#1499;&#1512;&#1493;&#1514; &#1506;&#1501; &#1492;&#1505;&#1489;&#1497;&#1489;&#1492;</h3><p>&#1492;&#1505;&#1497;&#1493;&#1512;&#1497;&#1501; &#1502;&#1495;&#1489;&#1512;&#1497;&#1501; &#1489;&#1497;&#1503; &#1497;&#1491;&#1497;&#1506;&#1514; &#1492;&#1488;&#1512;&#1509; &#1500;&#1513;&#1508;&#1492; &#8212; &#1492;&#1506;&#1493;&#1500;&#1497;&#1501; &#1512;&#1493;&#1499;&#1513;&#1497;&#1501; &#1502;&#1497;&#1504;&#1493;&#1495; &#1502;&#1512;&#1495;&#1489;&#1497;, &#1514;&#1512;&#1489;&#1493;&#1514;&#1497; &#1493;&#1492;&#1497;&#1505;&#1496;&#1493;&#1512;&#1497; &#1492;&#1499;&#1512;&#1495;&#1497; &#1500;&#1495;&#1497;&#1497;&#1501; &#1489;&#1497;&#1513;&#1512;&#1488;&#1500;.</p><span class="b-tag">&#1497;&#1491;&#1497;&#1506;&#1514; &#1492;&#1488;&#1512;&#1509;</span></div>
+        <div class="b-card reveal delay-2"><span class="b-icon">&#128218;</span><h3>&#1514;&#1499;&#1504;&#1497;&#1501; &#1508;&#1491;&#1490;&#1493;&#1490;&#1497;&#1497;&#1501; &#1502;&#1493;&#1514;&#1488;&#1502;&#1497;&#1501;</h3><p>&#1499;&#1500; &#1505;&#1497;&#1493;&#1512; &#1502;&#1490;&#1497;&#1506; &#1506;&#1501; &#1495;&#1493;&#1502;&#1512;&#1497;&#1501;, &#1513;&#1488;&#1500;&#1493;&#1514; &#1493;&#1502;&#1493;&#1504;&#1495;&#1497;&#1501; &#1502;&#1493;&#1499;&#1504;&#1497;&#1501; &#8212; &#1502;&#1492; &#1513;&#1502;&#1493;&#1512;&#1497;&#1491; &#1502;&#1504;&#1496;&#1500; &#1502;&#1502;&#1491;&#1512;&#1497;&#1499;&#1497; &#1492;&#1488;&#1493;&#1500;&#1508;&#1503; &#1493;&#1502;&#1513;&#1500;&#1497;&#1501; &#1488;&#1514; &#1513;&#1497;&#1506;&#1493;&#1512;&#1497; &#1492;&#1499;&#1497;&#1514;&#1492;.</p><span class="b-tag">&#1502;&#1493;&#1499;&#1503; &#1500;&#1513;&#1497;&#1502;&#1493;&#1513;</span></div>
+        <div class="b-card reveal delay-3"><span class="b-icon">&#129309;</span><h3>&#1513;&#1493;&#1514;&#1508;&#1493;&#1514; &#1500;&#1511;&#1500;&#1497;&#1496;&#1492;</h3><p>&#1490;&#1500;&#1497; &#1506;&#1493;&#1489;&#1491;&#1514; &#1489;&#1514;&#1497;&#1488;&#1493;&#1501; &#1502;&#1500;&#1488; &#1506;&#1501; &#1512;&#1499;&#1494;&#1497; &#1492;&#1511;&#1492;&#1497;&#1500;&#1492; &#8212; &#1502;&#1514;&#1488;&#1497;&#1502;&#1492; &#1488;&#1514; &#1492;&#1505;&#1497;&#1493;&#1512; &#1500;&#1510;&#1512;&#1499;&#1497;&#1501;, &#1500;&#1511;&#1489;&#1493;&#1510;&#1492; &#1493;&#1500;&#1502;&#1496;&#1512;&#1493;&#1514; &#1492;&#1505;&#1508;&#1510;&#1497;&#1508;&#1497;&#1493;&#1514; &#1513;&#1500;&#1499;&#1501;.</p><span class="b-tag">&#1513;&#1497;&#1512;&#1493;&#1514; &#1488;&#1497;&#1513;&#1497;</span></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="wave" style="background:#1E150A;"><svg viewBox="0 0 1440 60" preserveAspectRatio="none" fill="#EAD9BB" xmlns="http://www.w3.org/2000/svg"><path d="M0,60 C360,0 1080,80 1440,20 L1440,60 Z"/></svg></div>
+
+  <section class="section-gallery" id="gallery">
+    <div class="container">
+      <div class="gallery-header reveal">
+        <span class="label">&#1512;&#1490;&#1506;&#1497;&#1501; &#1502;&#1492;&#1513;&#1496;&#1495;</span>
+        <h2 class="section-title">&#1490;&#1500;&#1512;&#1497;&#1497;&#1514; &#1514;&#1502;&#1493;&#1504;&#1493;&#1514;</h2>
+        <p class="section-sub" style="margin:0 auto;">&#1502;&#1512;&#1490;&#1506;&#1497; &#1495;&#1497;&#1493;&#1498; &#1493;&#1506;&#1491; &#1504;&#1493;&#1508;&#1497;&#1501; &#1506;&#1493;&#1510;&#1512;&#1497; &#1504;&#1513;&#1497;&#1502;&#1492; &#8212; &#1499;&#1498; &#1504;&#1512;&#1488;&#1497;&#1501; &#1492;&#1505;&#1497;&#1493;&#1512;&#1497;&#1501; &#1513;&#1500;&#1504;&#1493;.</p>
+      </div>
+      <div class="gallery-mosaic reveal delay-1">
+        <div class="g-item"><div class="g-placeholder"><div class="g-placeholder-icon">&#127968;</div><span>&#1504;&#1493;&#1507; &#1508;&#1504;&#1493;&#1512;&#1502;&#1497; &#1502;&#1502;&#1505;&#1500;&#1493;&#1500; &#1492;&#1505;&#1497;&#1493;&#1512;</span></div></div>
+        <div class="g-item"><div class="g-placeholder"><div class="g-placeholder-icon">&#128522;</div><span>&#1506;&#1493;&#1500;&#1497;&#1501; &#1502;&#1495;&#1497;&#1497;&#1499;&#1497;&#1501; &#1489;&#1505;&#1497;&#1493;&#1512;</span></div></div>
+        <div class="g-item"><div class="g-placeholder"><div class="g-placeholder-icon">&#128506;</div><span>&#1490;&#1500;&#1497; &#1489;&#1508;&#1506;&#1493;&#1500;&#1492; &#1506;&#1501; &#1506;&#1494;&#1512;&#1497; &#1492;&#1491;&#1512;&#1499;&#1492;</span></div></div>
+        <div class="g-item"><div class="g-placeholder"><div class="g-placeholder-icon">&#127807;</div><span>&#1513;&#1508;&#1500;&#1514; &#1497;&#1492;&#1493;&#1491;&#1492;</span></div></div>
+        <div class="g-item"><div class="g-placeholder"><div class="g-placeholder-icon">&#127961;</div><span>&#1505;&#1497;&#1493;&#1512; &#1506;&#1497;&#1512;&#1493;&#1504;&#1497;</span></div></div>
+        <div class="g-item"><div class="g-placeholder"><div class="g-placeholder-icon">&#128218;</div><span>&#1500;&#1497;&#1502;&#1493;&#1491; &#1489;&#1513;&#1496;&#1495;</span></div></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="wave" style="background:#EAD9BB;"><svg viewBox="0 0 1440 60" preserveAspectRatio="none" fill="#FAF5EB" xmlns="http://www.w3.org/2000/svg"><path d="M0,30 C400,60 1000,0 1440,40 L1440,60 L0,60 Z"/></svg></div>
+
+  <section class="section-about" id="about">
+    <div class="container">
+      <div class="about-grid">
+        <div class="about-img-wrap reveal">
+          <div class="about-photo-ph">
+            <div class="icon">&#129517;</div>
+            <span class="ph-text">&#1514;&#1502;&#1493;&#1504;&#1492; &#1513;&#1500; &#1490;&#1500;&#1497; &#1489;&#1504;&#1497;&#1503;</span>
+          </div>
+          <div class="about-badge">
+            <span class="num">10+</span>
+            <span class="lbl">&#1513;&#1504;&#1493;&#1514; &#1504;&#1497;&#1505;&#1497;&#1493;&#1503;</span>
+          </div>
+        </div>
+        <div class="about-content reveal delay-2">
+          <span class="label">&#1506;&#1500; &#1492;&#1502;&#1493;&#1512;&#1514; &#1491;&#1512;&#1498;</span>
+          <h2 class="section-title">&#1490;&#1500;&#1497; &#1489;&#1504;&#1497;&#1503; &#8212;<br/>&#1502;&#1493;&#1512;&#1514; &#1491;&#1512;&#1498; &#1493;&#1513;&#1493;&#1514;&#1508;&#1492; &#1500;&#1491;&#1512;&#1498;</h2>
+          <p class="about-name">&#1490;&#1500;&#1497; &#1489;&#1504;&#1497;&#1503;</p>
+          <p class="about-role">&#1502;&#1493;&#1512;&#1514; &#1491;&#1512;&#1498; &#1502;&#1493;&#1505;&#1502;&#1499;&#1514; | &#1502;&#1493;&#1502;&#1495;&#1497;&#1514; &#1500;&#1488;&#1494;&#1493;&#1512; &#1492;&#1502;&#1512;&#1499;&#1494; &#1493;&#1513;&#1508;&#1500;&#1514; &#1497;&#1492;&#1493;&#1491;&#1492;</p>
+          <p class="about-desc">&#1490;&#1500;&#1497; &#1492;&#1497;&#1488; &#1502;&#1493;&#1512;&#1514; &#1491;&#1512;&#1498; &#1502;&#1493;&#1505;&#1502;&#1499;&#1514; &#1489;&#1506;&#1500;&#1514; &#1504;&#1497;&#1505;&#1497;&#1493;&#1503; &#1506;&#1513;&#1497;&#1512; &#1489;&#1492;&#1491;&#1512;&#1499;&#1514; &#1511;&#1489;&#1493;&#1510;&#1493;&#1514; &#1502;&#1490;&#1493;&#1493;&#1504;&#1493;&#1514; &#1489;&#1488;&#1494;&#1493;&#1512; &#1492;&#1502;&#1512;&#1499;&#1494; &#1493;&#1513;&#1508;&#1500;&#1514; &#1497;&#1492;&#1493;&#1491;&#1492;. &#1492;&#1514;&#1502;&#1495;&#1493;&#1514;&#1492; &#1492;&#1497;&#1497;&#1495;&#1493;&#1491;&#1497;&#1514; &#1492;&#1497;&#1488; &#1489;&#1513;&#1497;&#1500;&#1493;&#1489; &#1489;&#1497;&#1503; &#1497;&#1491;&#1497;&#1506;&#1514; &#1492;&#1488;&#1512;&#1509; &#1500;&#1504;&#1490;&#1497;&#1513;&#1493;&#1514; &#1513;&#1508;&#1514;&#1497;&#1514; &#8212; &#1492;&#1491;&#1512;&#1499;&#1492; &#1513;&#1492;&#1497;&#1488; &#1490;&#1501; &#1495;&#1493;&#1493;&#1497;&#1497;&#1514;&#1497;&#1514;, &#1490;&#1501; &#1495;&#1497;&#1504;&#1493;&#1499;&#1497;&#1514; &#1493;&#1490;&#1501; &#1502;&#1493;&#1504;&#1490;&#1513;&#1514; &#1500;&#1491;&#1493;&#1489;&#1512;&#1497; &#1506;&#1489;&#1512;&#1497;&#1514; &#1502;&#1514;&#1495;&#1497;&#1500;&#1497;&#1501;.</p>
+          <p class="about-desc">&#1490;&#1500;&#1497; &#1508;&#1497;&#1514;&#1495;&#1492; &#1513;&#1497;&#1496;&#1492; &#1508;&#1491;&#1490;&#1493;&#1490;&#1497;&#1514; &#1502;&#1497;&#1493;&#1495;&#1491;&#1514; &#1513;&#1502;&#1488;&#1508;&#1513;&#1512;&#1514; &#1500;&#1511;&#1489;&#1493;&#1510;&#1493;&#1514; &#1506;&#1493;&#1500;&#1497;&#1501; &#1502;&#1512;&#1511;&#1506;&#1497;&#1501; &#1513;&#1493;&#1504;&#1497;&#1501; &#1500;&#1492;&#1513;&#1514;&#1514;&#1507; &#1489;&#1505;&#1497;&#1493;&#1512; &#1488;&#1495;&#1491;, &#1500;&#1492;&#1489;&#1497;&#1503;, &#1500;&#1497;&#1492;&#1504;&#1493;&#1514; &#1493;&#1500;&#1510;&#1488;&#1514; &#1506;&#1501; &#1489;&#1497;&#1496;&#1495;&#1493;&#1503; &#1506;&#1510;&#1502;&#1497; &#1500;&#1513;&#1493;&#1504;&#1497; &#1513;&#1502;&#1513;&#1508;&#1497;&#1506; &#1506;&#1500; &#1499;&#1500; &#1492;&#1502;&#1513;&#1498; &#1514;&#1492;&#1500;&#1497;&#1498; &#1492;&#1511;&#1500;&#1497;&#1496;&#1492;.</p>
+          <div class="about-tags">
+            <span class="a-tag">&#1502;&#1493;&#1512;&#1514; &#1491;&#1512;&#1498; &#1502;&#1493;&#1505;&#1502;&#1499;&#1514;</span>
+            <span class="a-tag">&#1506;&#1489;&#1512;&#1497;&#1514; &#1511;&#1500;&#1492;</span>
+            <span class="a-tag">&#1513;&#1508;&#1500;&#1514; &#1497;&#1492;&#1493;&#1491;&#1492;</span>
+            <span class="a-tag">&#1488;&#1494;&#1493;&#1512; &#1492;&#1502;&#1512;&#1499;&#1494;</span>
+            <span class="a-tag">&#1511;&#1500;&#1497;&#1496;&#1492; &amp; &#1513;&#1508;&#1492;</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-testimonials" id="testimonials">
+    <div class="container">
+      <div class="testimonials-header reveal">
+        <span class="label">&#1502;&#1492; &#1488;&#1493;&#1502;&#1512;&#1497;&#1501; &#1506;&#1500;&#1497;&#1504;&#1493;</span>
+        <h2 class="section-title">&#1492;&#1502;&#1500;&#1510;&#1493;&#1514;</h2>
+        <p class="section-sub" style="margin:0 auto;">&#1510;&#1497;&#1496;&#1493;&#1496;&#1497;&#1501; &#1513;&#1500; &#1512;&#1499;&#1494;&#1497; &#1511;&#1500;&#1497;&#1496;&#1492;, &#1502;&#1504;&#1492;&#1500;&#1497; &#1488;&#1493;&#1500;&#1508;&#1504;&#1497;&#1501; &#1493;&#1506;&#1493;&#1500;&#1497;&#1501; &#1513;&#1506;&#1489;&#1512;&#1493; &#1488;&#1514; &#1492;&#1495;&#1493;&#1493;&#1497;&#1497;&#1492;.</p>
+      </div>
+      <div class="testimonials-grid">
+        <div class="t-card placeholder reveal delay-1">
+          <div class="t-placeholder-inner">
+            <div class="icon">&#128172;</div>
+            <p>&#1510;&#1497;&#1496;&#1493;&#1496; &#1513;&#1500; &#1512;&#1499;&#1494; &#1511;&#1500;&#1497;&#1496;&#1492; / &#1502;&#1504;&#1492;&#1500; &#1488;&#1493;&#1500;&#1508;&#1503;<br/>&#1497;&#1513;&#1493;&#1500;&#1489; &#1499;&#1488;&#1503; &#1489;&#1492;&#1502;&#1513;&#1498;</p>
+          </div>
+        </div>
+        <div class="t-card placeholder reveal delay-2">
+          <div class="t-placeholder-inner">
+            <div class="icon">&#128172;</div>
+            <p>&#1510;&#1497;&#1496;&#1493;&#1496; &#1513;&#1500; &#1506;&#1493;&#1500;&#1492; &#1513;&#1492;&#1513;&#1514;&#1514;&#1507; &#1489;&#1505;&#1497;&#1493;&#1512;<br/>&#1497;&#1513;&#1493;&#1500;&#1489; &#1499;&#1488;&#1503; &#1489;&#1492;&#1502;&#1513;&#1498;</p>
+          </div>
+        </div>
+        <div class="t-card placeholder reveal delay-3">
+          <div class="t-placeholder-inner">
+            <div class="icon">&#128172;</div>
+            <p>&#1510;&#1497;&#1496;&#1493;&#1496; &#1513;&#1500; &#1512;&#1499;&#1494; &#1511;&#1492;&#1497;&#1500;&#1492;<br/>&#1497;&#1513;&#1493;&#1500;&#1489; &#1499;&#1488;&#1503; &#1489;&#1492;&#1502;&#1513;&#1498;</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="wave" style="background:var(--sand);"><svg viewBox="0 0 1440 60" preserveAspectRatio="none" fill="#1E150A" xmlns="http://www.w3.org/2000/svg"><path d="M0,0 C480,60 960,0 1440,50 L1440,60 L0,60 Z"/></svg></div>
+
+  <section class="section-contact" id="contact">
+    <div class="container">
+      <div class="contact-grid">
+        <div class="contact-info reveal">
+          <span class="label">&#1497;&#1510;&#1497;&#1512;&#1514; &#1511;&#1513;&#1512;</span>
+          <h2 class="section-title">&#1502;&#1493;&#1499;&#1504;&#1497;&#1501; &#1500;&#1514;&#1488;&#1501;<br/>&#1505;&#1497;&#1493;&#1512; &#1500;&#1511;&#1489;&#1493;&#1510;&#1492; &#1513;&#1500;&#1499;&#1501;?</h2>
+          <p class="section-sub">&#1510;&#1512;&#1493; &#1511;&#1513;&#1512; &#1493;&#1504;&#1489;&#1504;&#1492; &#1497;&#1495;&#1491; &#1505;&#1497;&#1493;&#1512; &#1502;&#1493;&#1514;&#1488;&#1501; &#1488;&#1497;&#1513;&#1497;&#1514; &#1500;&#1488;&#1493;&#1500;&#1508;&#1503;, &#1500;&#1511;&#1492;&#1497;&#1500;&#1492; &#1493;&#1500;&#1502;&#1496;&#1512;&#1493;&#1514; &#1492;&#1511;&#1500;&#1497;&#1496;&#1492; &#1513;&#1500;&#1499;&#1501;.</p>
+          <div class="contact-details">
+            <div class="c-item">
+              <div class="c-icon">&#128222;</div>
+              <a href="tel:0523937451">052-3937451 &#8212; &#1490;&#1500;&#1497; &#1489;&#1504;&#1497;&#1503;</a>
+            </div>
+            <div class="c-item">
+              <div class="c-icon">&#128172;</div>
+              <a href="https://wa.me/972523937451" target="_blank" rel="noopener">&#1493;&#1493;&#1488;&#1496;&#1505;&#1488;&#1508; &#8212; &#1500;&#1495;&#1510;&#1493; &#1500;&#1513;&#1497;&#1495;&#1492; &#1497;&#1513;&#1497;&#1512;&#1492;</a>
+            </div>
+            <div class="c-item">
+              <div class="c-icon">&#128205;</div>
+              <span>&#1488;&#1494;&#1493;&#1512; &#1492;&#1502;&#1512;&#1499;&#1494; &#1493;&#1513;&#1508;&#1500;&#1514; &#1497;&#1492;&#1493;&#1491;&#1492;, &#1497;&#1513;&#1512;&#1488;&#1500;</span>
+            </div>
+          </div>
+        </div>
+        <div class="contact-form reveal delay-2">
+          <p class="form-title">&#1500;&#1511;&#1489;&#1500;&#1514; &#1492;&#1510;&#1506;&#1492; &#1500;&#1505;&#1497;&#1493;&#1512; &#1502;&#1493;&#1514;&#1488;&#1501; &#1488;&#1497;&#1513;&#1497;&#1514;</p>
+          <form onsubmit="handleSubmit(event)">
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">&#1513;&#1501; &#1502;&#1500;&#1488; *</label>
+                <input type="text" class="form-input" placeholder="&#1513;&#1502;&#1498; &#1492;&#1502;&#1500;&#1488;" required />
+              </div>
+              <div class="form-group">
+                <label class="form-label">&#1496;&#1500;&#1508;&#1493;&#1503; *</label>
+                <input type="tel" class="form-input" placeholder="050-0000000" required />
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">&#1514;&#1508;&#1511;&#1497;&#1491;</label>
+              <select class="form-select">
+                <option value="">&#1489;&#1495;&#1512;/&#1497; &#1514;&#1508;&#1511;&#1497;&#1491;</option>
+                <option>&#1512;&#1499;&#1494;/&#1514; &#1511;&#1500;&#1497;&#1496;&#1492;</option>
+                <option>&#1502;&#1504;&#1492;&#1500;/&#1514; &#1488;&#1493;&#1500;&#1508;&#1503;</option>
+                <option>&#1512;&#1499;&#1494;/&#1514; &#1511;&#1492;&#1497;&#1500;&#1492;</option>
+                <option>&#1488;&#1495;&#1512;</option>
+              </select>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">&#1490;&#1493;&#1491;&#1500; &#1511;&#1489;&#1493;&#1510;&#1492;</label>
+                <input type="text" class="form-input" placeholder="&#1502;&#1505;' &#1502;&#1513;&#1514;&#1514;&#1508;&#1497;&#1501;" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">&#1505;&#1493;&#1490; &#1505;&#1497;&#1493;&#1512;</label>
+                <select class="form-select">
+                  <option value="">&#1492;&#1506;&#1491;&#1508;&#1492;</option>
+                  <option>&#1505;&#1497;&#1493;&#1512; &#1506;&#1497;&#1512;&#1493;&#1504;&#1497;</option>
+                  <option>&#1505;&#1497;&#1493;&#1512; &#1492;&#1497;&#1505;&#1496;&#1493;&#1512;&#1497;</option>
+                  <option>&#1505;&#1497;&#1493;&#1512; &#1496;&#1489;&#1506;</option>
+                  <option>&#1490;&#1502;&#1497;&#1513;</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">&#1492;&#1506;&#1512;&#1493;&#1514; &#1504;&#1493;&#1505;&#1508;&#1493;&#1514;</label>
+              <textarea class="form-textarea" placeholder="&#1512;&#1502;&#1514; &#1506;&#1489;&#1512;&#1497;&#1514; &#1492;&#1511;&#1489;&#1493;&#1510;&#1492;, &#1514;&#1488;&#1512;&#1497;&#1499;&#1497;&#1501; &#1502;&#1493;&#1506;&#1491;&#1508;&#1497;&#1501;, &#1489;&#1511;&#1513;&#1493;&#1514; &#1502;&#1497;&#1493;&#1495;&#1491;&#1493;&#1514;..."></textarea>
+            </div>
+            <button type="submit" class="btn-submit" id="submitBtn">&#1513;&#1500;&#1497;&#1495;&#1514; &#1489;&#1511;&#1513;&#1492; &#1500;&#1514;&#1497;&#1488;&#1493;&#1501; &#1505;&#1497;&#1493;&#1512; &#10022;</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="footer-bar" style="background:#1E150A;">
+    <div class="container">
+      <div class="footer-inner">
+        <span class="f-logo">&#1497;&#1513;&#1512;&#1488;&#1500; &#1489;&#1506;&#1489;&#1512;&#1497;&#1514; &#1511;&#1500;&#1492;</span>
+        <span class="f-copy">&#169; 2025 &#1490;&#1500;&#1497; &#1489;&#1504;&#1497;&#1503; | &#1499;&#1500; &#1492;&#1494;&#1499;&#1493;&#1497;&#1493;&#1514; &#1513;&#1502;&#1493;&#1512;&#1493;&#1514;</span>
+      </div>
+    </div>
+  </div>
+
+  <a class="wa-float" href="https://wa.me/972523937451" target="_blank" rel="noopener" title="WhatsApp">
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+  </a>
+
+  <script>
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => { navbar.classList.toggle('scrolled', window.scrollY > 60); }, { passive: true });
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+    document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+    function handleSubmit(e) {
+      e.preventDefault();
+      const btn = document.getElementById('submitBtn');
+      btn.textContent = '\u05d4\u05d4\u05d5\u05d3\u05e2\u05d4 \u05e0\u05e9\u05dc\u05d7\u05d4! \u2713';
+      btn.style.background = '#4A5E2F';
+      btn.disabled = true;
+      setTimeout(() => { btn.textContent = '\u05e9\u05dc\u05d9\u05d7\u05ea \u05d1\u05e7\u05e9\u05d4 \u05dc\u05ea\u05d9\u05d0\u05d5\u05dd \u05e1\u05d9\u05d5\u05e8 \u2736'; btn.style.background = ''; btn.disabled = false; e.target.reset(); }, 4000);
+    }
+  </script>
+</body>
+</html>
