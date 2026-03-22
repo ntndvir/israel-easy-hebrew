@@ -482,6 +482,10 @@
           <div>גלי בנין<br /><a href="tel:0523937451">052-3937451</a></div>
         </div>
         <div class="contact-detail">
+          <div class="icon-wrap">✉️</div>
+          <div>אימייל<br /><a href="mailto:gali.benin@gmail.com">gali.benin@gmail.com</a></div>
+        </div>
+        <div class="contact-detail">
           <div class="icon-wrap">💬</div>
           <div>WhatsApp<br /><a href="https://wa.me/972523937451">שלחו הודעה</a></div>
         </div>
@@ -490,7 +494,7 @@
           <div>אזורי פעילות<br /><span style="color:rgba(255,255,255,.7)">מרכז ושפלת יהודה</span></div>
         </div>
       </div>
-      <form class="contact-form" onsubmit="handleSubmit(event)">
+      <form class="contact-form" action="https://formspree.io/f/gali.benin@gmail.com" method="POST">
         <input type="text" placeholder="שם מלא *" required />
         <input type="tel" placeholder="טלפון *" required />
         <input type="email" placeholder="אימייל" />
@@ -504,6 +508,8 @@
         </select>
         <input type="number" placeholder="גודל הקבוצה המשוער" min="1" />
         <textarea placeholder="פרטים נוספים – אזור מועדף, רמת השפה, מועדים..."></textarea>
+        <input type="hidden" name="_subject" value="בקשה לתיאום סיור – ישראל בעברית קלה" />
+        <input type="hidden" name="_language" value="he" />
         <button type="submit" class="form-btn">שלחו הצעה לסיור ←</button>
       </form>
     </div>
