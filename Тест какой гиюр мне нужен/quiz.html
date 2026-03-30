@@ -1,0 +1,596 @@
+<!--
+  EMBEDDING INSTRUCTIONS:
+  1. Copy the entire contents of this file.
+  2. Paste into your landing page HTML where you want the quiz to appear.
+  3. The widget requires no external dependencies except Google Fonts
+     (loaded automatically via <link> tag in the <head>).
+  4. The widget container has no background color and adapts to any page background.
+  5. Max width: 620px, centered with margin: 0 auto.
+-->
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Какой гиюр мне нужен — тест</title>
+
+  <!-- Google Fonts: Playfair Display (headings) + Inter (body) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    /* ─── Standalone-preview body (stripped when embedded) ─── */
+    body {
+      margin: 0;
+      padding: 40px 16px 60px;
+      background: #f7f5f0;
+    }
+
+    /* ─────────────────────────────────────────────────────────
+       WIDGET RESET — scoped to #quiz-widget so nothing leaks
+    ───────────────────────────────────────────────────────── */
+    #quiz-widget,
+    #quiz-widget *,
+    #quiz-widget *::before,
+    #quiz-widget *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ─────────────────────────────────────────────────────────
+       DESIGN TOKENS
+    ───────────────────────────────────────────────────────── */
+    #quiz-widget {
+      --navy:       #1a2744;
+      --gold:       #c9a84c;
+      --gold-dark:  #b8963d;
+      --gold-bg:    #fdf8ee;   /* card tint */
+      --gold-sel:   #fef5d8;   /* selected option fill */
+      --border:     #e5ddc8;
+      --text:       #1a2744;
+      --muted:      #7a7262;
+      --radius:     12px;
+
+      /* ── Layout ── */
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      color: var(--text);
+      direction: ltr;
+      max-width: 620px;
+      margin: 0 auto;
+      padding: 0 4px;   /* slight outer breathing room */
+      /* No background — embeddable on any landing-page colour */
+    }
+
+    /* ─────────────────────────────────────────────────────────
+       PROGRESS BAR
+    ───────────────────────────────────────────────────────── */
+    .qw-track {
+      height: 4px;
+      background: var(--border);
+      border-radius: 2px;
+      overflow: hidden;
+      margin-bottom: 28px;
+    }
+    .qw-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--gold-dark), var(--gold));
+      border-radius: 2px;
+      width: 0%;
+      transition: width 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* ─────────────────────────────────────────────────────────
+       STEP COUNTER
+    ───────────────────────────────────────────────────────── */
+    .qw-counter {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      color: var(--muted);
+      margin-bottom: 20px;
+    }
+
+    /* ─────────────────────────────────────────────────────────
+       QUESTION FADE-IN ANIMATION
+    ───────────────────────────────────────────────────────── */
+    @keyframes qwFadeUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0);    }
+    }
+    .qw-question {
+      animation: qwFadeUp 0.35s ease both;
+    }
+
+    /* ─────────────────────────────────────────────────────────
+       QUESTION TEXT
+    ───────────────────────────────────────────────────────── */
+    .qw-q-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(20px, 4.5vw, 26px);
+      font-weight: 700;
+      color: var(--navy);
+      line-height: 1.3;
+      margin-bottom: 8px;
+    }
+    .qw-q-sub {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.55;
+      margin-bottom: 26px;
+    }
+
+    /* ─────────────────────────────────────────────────────────
+       OPTION BUTTONS
+    ───────────────────────────────────────────────────────── */
+    .qw-options {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .qw-option {
+      display: block;
+      width: 100%;
+      text-align: left;
+      background: var(--gold-bg);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px 22px;
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--navy);
+      cursor: pointer;
+      line-height: 1.5;
+      box-shadow: 0 1px 4px rgba(26, 39, 68, 0.06);
+      transition:
+        transform    0.18s ease,
+        border-color 0.18s ease,
+        background   0.18s ease,
+        box-shadow   0.18s ease;
+    }
+    .qw-option:hover {
+      transform: scale(1.02);
+      border-color: var(--gold);
+      box-shadow: 0 4px 16px rgba(201, 168, 76, 0.22);
+    }
+    /* Selected state: gold left border (= inline-start in LTR) */
+    .qw-option.is-sel {
+      background: var(--gold-sel);
+      border-color: var(--gold);
+      border-left: 4px solid var(--gold);
+      padding-left: 19px; /* compensate for thicker border */
+      box-shadow: 0 4px 16px rgba(201, 168, 76, 0.22);
+    }
+
+    /* ─────────────────────────────────────────────────────────
+       BACK BUTTON (between questions)
+    ───────────────────────────────────────────────────────── */
+    .qw-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      margin-top: 22px;
+      background: none;
+      border: none;
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--muted);
+      cursor: pointer;
+      transition: color 0.2s ease;
+    }
+    .qw-back:hover { color: var(--navy); }
+
+    /* ─────────────────────────────────────────────────────────
+       RESULT SCREEN
+    ───────────────────────────────────────────────────────── */
+    @keyframes qwFadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0);    }
+    }
+    .qw-result {
+      animation: qwFadeIn 0.4s ease both;
+    }
+
+    /* Small gold eyebrow */
+    .qw-eyebrow {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 10px;
+    }
+
+    /* Result heading */
+    .qw-result-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(20px, 4vw, 26px);
+      font-weight: 700;
+      color: var(--navy);
+      line-height: 1.3;
+      margin-bottom: 20px;
+    }
+
+    /* Personalised text block */
+    .qw-result-body {
+      background: var(--gold-bg);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--gold); /* LTR start accent */
+      border-radius: var(--radius);
+      padding: 32px 36px;
+      font-size: 14.5px;
+      line-height: 1.9;
+      color: #2c3547;
+      margin-bottom: 28px;
+    }
+
+    /* ─────────────────────────────────────────────────────────
+       CTA BLOCK
+    ───────────────────────────────────────────────────────── */
+    .qw-cta {
+      background: var(--navy);
+      border-radius: var(--radius);
+      padding: 32px 36px 28px;
+      text-align: center;
+    }
+    .qw-cta-heading {
+      font-family: 'Playfair Display', serif;
+      font-size: 21px;
+      font-weight: 700;
+      color: var(--gold);
+      margin-bottom: 10px;
+    }
+    .qw-cta-sub {
+      font-size: 14px;
+      color: rgba(247, 245, 240, 0.70);
+      line-height: 1.65;
+      margin-bottom: 22px;
+    }
+
+    /* CTA button — gold, pulse on load */
+    @keyframes qwPulse {
+      0%,  100% { transform: scale(1);    }
+      50%        { transform: scale(1.04); }
+    }
+    .qw-cta-btn {
+      display: inline-block;
+      background: var(--gold);
+      color: var(--navy);
+      font-family: 'Inter', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      padding: 15px 34px;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: background 0.2s ease, transform 0.15s ease;
+      animation: qwPulse 2s ease-in-out infinite;
+    }
+    .qw-cta-btn:hover {
+      background: var(--gold-dark);
+      animation: none;
+      transform: scale(1.02);
+    }
+
+    /* Reset link */
+    .qw-reset {
+      display: block;
+      margin-top: 18px;
+      background: none;
+      border: none;
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      color: rgba(247, 245, 240, 0.42);
+      cursor: pointer;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      transition: color 0.2s ease;
+    }
+    .qw-reset:hover { color: rgba(247, 245, 240, 0.80); }
+
+    /* ─────────────────────────────────────────────────────────
+       MOBILE  (320px – 480px)
+    ───────────────────────────────────────────────────────── */
+    @media (max-width: 480px) {
+      body { padding: 24px 12px 48px; }
+
+      .qw-option {
+        font-size: 14px;
+        padding: 17px 16px;
+      }
+      .qw-option.is-sel { padding-left: 13px; }
+
+      .qw-cta         { padding: 22px 16px 20px; }
+      .qw-result-body { font-size: 14px; padding: 18px 14px; }
+      .qw-cta-btn     { font-size: 15px; padding: 14px 24px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ╔══════════════════════════════════════════════════╗
+     ║            QUIZ WIDGET — START                  ║
+     ╚══════════════════════════════════════════════════╝ -->
+<div id="quiz-widget"></div>
+<!-- ╔══════════════════════════════════════════════════╗
+     ║            QUIZ WIDGET — END                    ║
+     ╚══════════════════════════════════════════════════╝ -->
+
+<script>
+(function () {
+  'use strict';
+
+  /* ══════════════════════════════════════════════════════════
+     QUIZ DATA
+  ══════════════════════════════════════════════════════════ */
+
+  var QUESTIONS = [
+    {
+      id:   'location',
+      text: 'Где вы сейчас живёте?',
+      sub:  'Это влияет на порядок прохождения гиюра и доступные пути',
+      opts: [
+        { v: 'israel', l: 'В Израиле' },
+        { v: 'abroad', l: 'За рубежом' }
+      ]
+    },
+    {
+      id:   'citizenship',
+      text: 'Есть ли у вас израильское гражданство?',
+      sub:  '',
+      opts: [
+        { v: 'yes',      l: 'Да, есть гражданство' },
+        { v: 'resident', l: 'Нет, только вид на жительство или виза' },
+        { v: 'none',     l: 'Нет никакого статуса' }
+      ]
+    },
+    {
+      id:   'age',
+      text: 'Ваш возраст?',
+      sub:  '',
+      opts: [
+        { v: 'young',  l: 'До 25 лет' },
+        { v: 'adult',  l: '25–45 лет' },
+        { v: 'mature', l: 'Старше 45 лет' }
+      ]
+    },
+    {
+      id:   'partner',
+      text: 'Есть ли у вас партнёр — муж или жена?',
+      sub:  '',
+      opts: [
+        { v: 'none',    l: 'Нет, я один(одна)' },
+        { v: 'support', l: 'Да, и партнёр поддерживает меня' },
+        { v: 'neutral', l: 'Да, но партнёр относится нейтрально' },
+        { v: 'against', l: 'Да, но партнёр не поддерживает' }
+      ]
+    },
+    {
+      id:   'stage',
+      text: 'На каком этапе вы сейчас находитесь?',
+      sub:  '',
+      opts: [
+        { v: 'start',   l: 'Только начинаю думать о гиюре' },
+        { v: 'process', l: 'Уже в процессе — хожу на уроки или жду суда' },
+        { v: 'stuck',   l: 'Застрял(а) — не знаю, как двигаться дальше' },
+        { v: 'failed',  l: 'Был отказ или долгий перерыв' }
+      ]
+    }
+  ];
+
+  var TOTAL   = QUESTIONS.length;
+  var CTA_URL = 'https://app.upay.co.il/API6/s.php?m=RVhxMFJXd1V0S25XSEIyejAvaUd6UT09';
+
+  /* ══════════════════════════════════════════════════════════
+     STATE
+  ══════════════════════════════════════════════════════════ */
+
+  var step    = 0;
+  var answers = {};   // { location, citizenship, age, partner, stage }
+
+  /* ══════════════════════════════════════════════════════════
+     RESULT TEXT BUILDER
+     Concatenates personalised segments in order:
+       S1 — stage  |  S2 — location+citizenship  |
+       S3 — age    |  S4 — partner               |  S5 — closing
+  ══════════════════════════════════════════════════════════ */
+
+  function buildResult() {
+    var loc = answers.location;
+    var cit = answers.citizenship;
+    var age = answers.age;
+    var par = answers.partner;
+    var stg = answers.stage;
+
+    var parts = [];
+
+    /* ── S1: stage ──────────────────────────────────────── */
+    var s1Map = {
+      start:   'Вы только начинаете этот путь — и это самый важный момент, чтобы разобраться в том, как всё устроено.',
+      process: 'Вы уже в процессе — а значит, вам особенно важно понять, как правильно подготовиться и чего ожидать дальше.',
+      stuck:   'Бывает, что человек заходит в тупик — и не знает, куда двигаться. Именно для таких ситуаций и создан этот курс.',
+      failed:  'Отказ или долгая пауза — это не конец. В курсе есть честный разговор о том, почему суды отказывают и как правильно начать заново.'
+    };
+    parts.push(s1Map[stg]);
+
+    /* ── S2: location + citizenship ─────────────────────── */
+    if (loc === 'israel') {
+      if (cit === 'yes') {
+        parts.push('Вы живёте в Израиле и у вас есть гражданство — перед вами открыт стандартный путь гиюра через раввинский суд. В курсе «Всё о гиюре» подробно разобрано, как устроена эта система: как подать документы, что проверяют на бейт-дин, как подготовиться к собеседованию и что происходит после.');
+      } else if (cit === 'resident') {
+        parts.push('Вы живёте в Израиле, но без гражданства — и это отдельная тема, которой в курсе «Всё о гиюре» уделено особое место. Вы узнаете, как проходить гиюр без гражданства, как это связано с Законом о возвращении и как выстраивать взаимодействие с государственными органами.');
+      } else {
+        // cit === 'none'
+        parts.push('Вы живёте в Израиле без какого-либо официального статуса — ситуация непростая, но решаемая. В курсе «Всё о гиюре» разобраны конкретные пути для людей именно в таком положении.');
+      }
+    } else {
+      // loc === 'abroad'
+      parts.push('Гиюр за рубежом — отдельный и непростой путь. В курсе «Всё о гиюре» есть подробный раздел о том, как выбрать авторитетный раввинский суд за границей, какие существуют международно признанные пути и что важно учесть, если в будущем вы планируете переехать в Израиль.');
+      // Extra sentence for abroad + no citizenship
+      if (cit === 'resident' || cit === 'none') {
+        parts.push('Отсутствие израильского гражданства при жизни за рубежом требует особого подхода. В курсе вы найдёте конкретные ответы на вопрос, как гиюр за границей может повлиять на ваш статус и возможности в будущем.');
+      }
+    }
+
+    /* ── S3: age (only for young and mature) ────────────── */
+    if (age === 'young') {
+      parts.push('В молодом возрасте особенно остро стоят вопросы: как объяснить родителям, как не потерять друзей, что будет с личной жизнью. Курс говорит об этих страхах честно и без осуждения — и даёт инструменты, чтобы пройти этот путь уверенно.');
+    } else if (age === 'mature') {
+      parts.push('В вашем возрасте это по-настоящему осознанное решение — и бейт-дин это ценит. В курсе есть материал о том, как убедительно и естественно представить свою историю жизни и духовный путь перед судом.');
+    }
+    // age === 'adult' → no segment
+
+    /* ── S4: partner (skip if 'none') ───────────────────── */
+    var s4Map = {
+      support: 'Поддержка близкого человека — огромный ресурс. В курсе есть информация о том, как вовлечь партнёра в процесс на ключевых этапах и как превратить этот путь в совместный духовный опыт.',
+      neutral: 'Нейтральная позиция партнёра — это тоже непростая ситуация. В курсе разобрано, как мягко вовлечь близкого человека в процесс и объяснить ему, что это значит для вас.',
+      against: 'Мы понимаем, как это непросто — когда самый близкий человек не разделяет вашего пути. Вы не одни с этим. В курсе есть специальный раздел о том, как выстраивать диалог с партнёром и семьёй, как справляться с сопротивлением близких и сохранять отношения, не отказываясь от своего выбора.'
+    };
+    if (par !== 'none') {
+      parts.push(s4Map[par]);
+    }
+
+    /* ── S5: closing (always) ───────────────────────────── */
+    parts.push('Курс «Всё о гиюре» — это 4 подробных видеоурока на русском языке, которые проведут вас от первого вопроса до выхода из микве. В качестве бонуса вы получите дополнительные цифровые курсы совершенно бесплатно. Автор — Натан Двир, более 20 лет в системе гиюра.');
+
+    return parts.join(' ');
+  }
+
+  /* ══════════════════════════════════════════════════════════
+     HELPERS
+  ══════════════════════════════════════════════════════════ */
+
+  var root = document.getElementById('quiz-widget');
+
+  /**
+   * Animate the progress bar.
+   * Double rAF ensures the CSS transition fires after paint.
+   */
+  function animateProgress(pct) {
+    requestAnimationFrame(function () {
+      requestAnimationFrame(function () {
+        var fill = root.querySelector('.qw-fill');
+        if (fill) fill.style.width = pct + '%';
+      });
+    });
+  }
+
+  /* ══════════════════════════════════════════════════════════
+     RENDER: QUESTION SCREEN
+  ══════════════════════════════════════════════════════════ */
+
+  function renderQuestion(idx) {
+    var q   = QUESTIONS[idx];
+    var pct = Math.round((idx / TOTAL) * 100);
+
+    /* Build option buttons HTML */
+    var optsHTML = q.opts.map(function (o) {
+      var isSel = answers[q.id] === o.v ? ' is-sel' : '';
+      return (
+        '<button class="qw-option' + isSel + '" data-v="' + o.v + '">' +
+          o.l +
+        '</button>'
+      );
+    }).join('');
+
+    /* Render */
+    root.innerHTML =
+      '<div class="qw-track"><div class="qw-fill"></div></div>' +
+      '<div class="qw-counter">Вопрос ' + (idx + 1) + ' из ' + TOTAL + '</div>' +
+      '<div class="qw-question">' +
+        '<div class="qw-q-title">' + q.text + '</div>' +
+        (q.sub ? '<div class="qw-q-sub">' + q.sub + '</div>' : '') +
+        '<div class="qw-options">' + optsHTML + '</div>' +
+        (idx > 0 ? '<button class="qw-back">← Назад</button>' : '') +
+      '</div>';
+
+    animateProgress(pct);
+
+    /* ── Option click: save answer, highlight, auto-advance ── */
+    root.querySelectorAll('.qw-option').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        /* Store answer */
+        answers[q.id] = btn.dataset.v;
+
+        /* Visual: deselect all, select clicked */
+        root.querySelectorAll('.qw-option').forEach(function (b) {
+          b.classList.remove('is-sel');
+        });
+        btn.classList.add('is-sel');
+
+        /* Brief pause then advance */
+        setTimeout(function () {
+          step = idx + 1;
+          if (step < TOTAL) {
+            renderQuestion(step);
+          } else {
+            renderResult();
+          }
+        }, 260);
+      });
+    });
+
+    /* ── Back button ─────────────────────────────────────── */
+    var backBtn = root.querySelector('.qw-back');
+    if (backBtn) {
+      backBtn.addEventListener('click', function () {
+        step = idx - 1;
+        renderQuestion(step);
+      });
+    }
+  }
+
+  /* ══════════════════════════════════════════════════════════
+     RENDER: RESULT SCREEN
+  ══════════════════════════════════════════════════════════ */
+
+  function renderResult() {
+    var text = buildResult();
+
+    root.innerHTML =
+      '<div class="qw-track"><div class="qw-fill"></div></div>' +
+      '<div class="qw-result">' +
+        '<div class="qw-eyebrow">Ваш персональный результат</div>' +
+        '<div class="qw-result-title">Вот что важно знать в вашей ситуации</div>' +
+        '<div class="qw-result-body">' + text + '</div>' +
+        '<div class="qw-cta">' +
+          '<div class="qw-cta-heading">Курс «Всё о гиюре»</div>' +
+          '<div class="qw-cta-sub">' +
+            '4 подробных видеоурока на русском языке<br>' +
+            '+ бонусные курсы бесплатно' +
+          '</div>' +
+          '<a class="qw-cta-btn"' +
+             ' href="' + CTA_URL + '"' +
+             ' target="_blank"' +
+             ' rel="noopener noreferrer">' +
+            'Записаться на курс →' +
+          '</a>' +
+          '<button class="qw-reset">← Пройти тест заново</button>' +
+        '</div>' +
+      '</div>';
+
+    animateProgress(100);
+
+    /* ── Reset: clear state and return to question 1 ──── */
+    root.querySelector('.qw-reset').addEventListener('click', function () {
+      step    = 0;
+      answers = {};
+      renderQuestion(0);
+    });
+  }
+
+  /* ══════════════════════════════════════════════════════════
+     BOOT
+  ══════════════════════════════════════════════════════════ */
+
+  renderQuestion(0);
+
+}());
+</script>
+
+</body>
+</html>
