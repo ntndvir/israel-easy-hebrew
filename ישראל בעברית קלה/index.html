@@ -584,11 +584,15 @@
           <div>אזורי פעילות<br /><span style="color:rgba(255,255,255,.7)">תל אביב, ירושלים, חיפה ועוד</span></div>
         </div>
       </div>
-      <form class="contact-form" action="https://formspree.io/f/gali.benin@gmail.com" method="POST">
-        <input type="text" placeholder="שם מלא *" required />
-        <input type="tel" placeholder="טלפון *" required />
-        <input type="email" placeholder="אימייל" />
-        <select required>
+      <form class="contact-form" action="https://api.web3forms.com/submit" method="POST">
+        <input type="hidden" name="access_key" value="11be5599-b154-4592-9be8-297e3e2058b5" />
+        <input type="hidden" name="to" value="gali.benin@gmail.com" />
+        <input type="hidden" name="subject" value="בקשה לתיאום סיור – ישראל בעברית קלה" />
+        <input type="hidden" name="from_name" value="אתר ישראל בעברית קלה" />
+        <input type="text" name="name" placeholder="שם מלא *" required />
+        <input type="tel" name="phone" placeholder="טלפון *" required />
+        <input type="email" name="email" placeholder="אימייל" />
+        <select name="org_type" required>
           <option value="" disabled selected>סוג הארגון</option>
           <option>אולפן עברית</option>
           <option>מרכז קליטה</option>
@@ -596,10 +600,8 @@
           <option>רשות מקומית</option>
           <option>אחר</option>
         </select>
-        <input type="number" placeholder="גודל הקבוצה המשוער" min="1" />
-        <textarea placeholder="פרטים נוספים – אזור מועדף, רמת השפה, מועדים..."></textarea>
-        <input type="hidden" name="_subject" value="בקשה לתיאום סיור – ישראל בעברית קלה" />
-        <input type="hidden" name="_language" value="he" />
+        <input type="number" name="group_size" placeholder="גודל הקבוצה המשוער" min="1" />
+        <textarea name="message" placeholder="פרטים נוספים – אזור מועדף, רמת השפה, מועדים..."></textarea>
         <button type="submit" class="form-btn">שלחו הצעה לסיור ←</button>
       </form>
     </div>
