@@ -268,11 +268,12 @@
     #contact .section-label { color: #f9d47a; background: rgba(249,212,122,.15); }
     #contact h2 { color: #fff; }
     #contact .subtitle { color: rgba(255,255,255,.75); margin-bottom: 40px; }
-    .contact-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: start; }
-    .contact-info h3 { font-size: 1.25rem; font-weight: 700; margin-bottom: 20px; }
+    .contact-details-grid {
+      display: flex; flex-wrap: wrap; gap: 24px; justify-content: center;
+    }
     .contact-detail {
       display: flex; align-items: center; gap: 14px;
-      margin-bottom: 18px; font-size: 1rem;
+      font-size: 1rem;
     }
     .contact-detail .icon-wrap {
       width: 44px; height: 44px; border-radius: 10px;
@@ -281,31 +282,56 @@
       flex-shrink: 0;
     }
     .contact-detail a { color: #f9d47a; text-decoration: none; font-weight: 600; }
-    .contact-form { display: flex; flex-direction: column; gap: 14px; }
-    .contact-form input,
-    .contact-form select,
-    .contact-form textarea {
-      width: 100%;
-      background: rgba(255,255,255,.1);
-      border: 1px solid rgba(255,255,255,.2);
-      border-radius: 10px; padding: 14px 16px;
-      color: #fff; font-family: 'Heebo', sans-serif; font-size: 1rem;
-      outline: none; transition: border .2s;
+
+    /* ─── WHATSAPP FLOAT ─── */
+    @keyframes wa-shake {
+      0%, 100% { transform: rotate(0deg); }
+      15%       { transform: rotate(14deg); }
+      30%       { transform: rotate(-10deg); }
+      45%       { transform: rotate(8deg); }
+      60%       { transform: rotate(-6deg); }
+      75%       { transform: rotate(4deg); }
     }
-    .contact-form input::placeholder,
-    .contact-form textarea::placeholder { color: rgba(255,255,255,.5); }
-    .contact-form input:focus,
-    .contact-form select:focus,
-    .contact-form textarea:focus { border-color: #f9d47a; }
-    .contact-form select option { color: var(--dark); background: #fff; }
-    .contact-form textarea { resize: vertical; min-height: 110px; }
-    .form-btn {
-      background: #f9d47a; color: var(--dark);
-      border: none; border-radius: 30px; padding: 15px 36px;
-      font-family: 'Heebo', sans-serif; font-size: 1.05rem; font-weight: 800;
-      cursor: pointer; transition: transform .2s, box-shadow .2s; align-self: flex-start;
+    .wa-float {
+      position: fixed;
+      bottom: 28px;
+      left: 28px;
+      z-index: 999;
+      width: 58px; height: 58px;
+      background: #25d366;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 4px 20px rgba(37,211,102,.45);
+      text-decoration: none;
+      transition: transform .2s, box-shadow .2s;
+      animation: wa-shake 2.5s ease 3s infinite;
+      animation-play-state: running;
     }
-    .form-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,.25); }
+    .wa-float:hover {
+      transform: scale(1.1);
+      box-shadow: 0 6px 28px rgba(37,211,102,.6);
+      animation-play-state: paused;
+    }
+    .wa-float svg { width: 32px; height: 32px; fill: #fff; }
+    .wa-tooltip {
+      position: absolute;
+      left: 68px;
+      background: #1e2a3a;
+      color: #fff;
+      font-family: 'Heebo', sans-serif;
+      font-size: .88rem; font-weight: 600;
+      white-space: nowrap;
+      padding: 7px 14px;
+      border-radius: 20px;
+      opacity: 0; pointer-events: none;
+      transition: opacity .2s;
+    }
+    .wa-float:hover .wa-tooltip { opacity: 1; }
+    @media (max-width: 600px) {
+      .wa-float { width: 48px; height: 48px; bottom: 18px; left: 18px; }
+      .wa-float svg { width: 26px; height: 26px; }
+      .wa-tooltip { display: none; }
+    }
 
     /* ─── FOOTER ─── */
     footer {
@@ -559,54 +585,36 @@
 </section>
 
 <!-- ─── CONTACT ─── -->
-<section id="contact">
-  <div style="max-width:1100px; margin:auto;">
+<section id="contact" style="text-align:center;">
+  <div style="max-width:800px; margin:auto;">
     <span class="section-label">צרו קשר</span>
     <h2>מוכנים לקחת את הקבוצה שלכם לסיור?</h2>
-    <p class="subtitle">השאירו פרטים ונחזור אליכם עם הצעה מותאמת אישית לאולפן או לקהילה שלכם.</p>
-    <div class="contact-inner">
-      <div class="contact-info">
-        <h3>דברו ישירות עם גלי</h3>
-        <div class="contact-detail">
-          <div class="icon-wrap">📞</div>
-          <div>גלי בנין<br /><a href="tel:0523937451">052-3937451</a></div>
-        </div>
-        <div class="contact-detail">
-          <div class="icon-wrap">✉️</div>
-          <div>אימייל<br /><a href="mailto:gali.benin@gmail.com">gali.benin@gmail.com</a></div>
-        </div>
-        <div class="contact-detail">
-          <div class="icon-wrap">💬</div>
-          <div>WhatsApp<br /><a href="https://wa.me/972523937451">שלחו הודעה</a></div>
-        </div>
-        <div class="contact-detail">
-          <div class="icon-wrap">🗺️</div>
-          <div>אזורי פעילות<br /><span style="color:rgba(255,255,255,.7)">תל אביב, ירושלים, חיפה ועוד</span></div>
-        </div>
+    <p class="subtitle" style="margin:0 auto 40px;">דברו ישירות עם גלי — נשמח לתאם סיור מותאם לקבוצה שלכם.</p>
+    <div class="contact-details-grid">
+      <div class="contact-detail">
+        <div class="icon-wrap">📞</div>
+        <div>טלפון<br /><a href="tel:0523937451">052-3937451</a></div>
       </div>
-      <form class="contact-form" action="https://api.web3forms.com/submit" method="POST">
-        <input type="hidden" name="access_key" value="11be5599-b154-4592-9be8-297e3e2058b5" />
-        <input type="hidden" name="to" value="gali.benin@gmail.com" />
-        <input type="hidden" name="subject" value="בקשה לתיאום סיור – ישראל בעברית קלה" />
-        <input type="hidden" name="from_name" value="אתר ישראל בעברית קלה" />
-        <input type="text" name="name" placeholder="שם מלא *" required />
-        <input type="tel" name="phone" placeholder="טלפון *" required />
-        <input type="email" name="email" placeholder="אימייל" />
-        <select name="org_type" required>
-          <option value="" disabled selected>סוג הארגון</option>
-          <option>אולפן עברית</option>
-          <option>מרכז קליטה</option>
-          <option>עמותה</option>
-          <option>רשות מקומית</option>
-          <option>אחר</option>
-        </select>
-        <input type="number" name="group_size" placeholder="גודל הקבוצה המשוער" min="1" />
-        <textarea name="message" placeholder="פרטים נוספים – אזור מועדף, רמת השפה, מועדים..."></textarea>
-        <button type="submit" class="form-btn">שלחו הצעה לסיור ←</button>
-      </form>
+      <div class="contact-detail">
+        <div class="icon-wrap">✉️</div>
+        <div>אימייל<br /><a href="mailto:gali.benin@gmail.com">gali.benin@gmail.com</a></div>
+      </div>
+      <div class="contact-detail">
+        <div class="icon-wrap">💬</div>
+        <div>WhatsApp<br /><a href="https://wa.me/972523937451">שלחו הודעה</a></div>
+      </div>
     </div>
   </div>
 </section>
+
+<!-- ─── WHATSAPP FLOAT ─── -->
+<a class="wa-float" href="https://wa.me/972523937451" target="_blank" rel="noopener" aria-label="שלחו הודעה ב-WhatsApp">
+  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+    <path d="M12 0C5.373 0 0 5.373 0 12c0 2.117.551 4.103 1.513 5.832L0 24l6.335-1.493A11.954 11.954 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.006-1.371l-.36-.214-3.727.878.893-3.641-.235-.374A9.818 9.818 0 1112 21.818z"/>
+  </svg>
+  <span class="wa-tooltip">דברו איתנו ב-WhatsApp</span>
+</a>
 
 <!-- ─── FOOTER ─── -->
 <footer>
