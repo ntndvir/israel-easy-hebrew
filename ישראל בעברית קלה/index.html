@@ -9,17 +9,17 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --sand:     #f5f0e8;
-      --terra:    #c0622f;
-      --terra-dark: #9e4e24;
-      --olive:    #6b7c3a;
-      --olive-light: #8fa04e;
-      --sky:      #4a8fa8;
-      --dark:     #2b2b2b;
-      --mid:      #555;
+      --sand:     #f0f7ff;
+      --terra:    #1a7fd4;
+      --terra-dark: #1262a8;
+      --olive:    #26c281;
+      --olive-light: #48d89b;
+      --sky:      #54a0ff;
+      --dark:     #1e2a3a;
+      --mid:      #556070;
       --light:    #fff;
       --radius:   14px;
-      --shadow:   0 4px 28px rgba(0,0,0,.10);
+      --shadow:   0 4px 28px rgba(0,80,160,.10);
     }
 
     html { scroll-behavior: smooth; }
@@ -35,7 +35,7 @@
     /* ─── NAV ─── */
     nav {
       position: fixed; top: 0; width: 100%; z-index: 100;
-      background: rgba(245,240,232,.96);
+      background: rgba(240,247,255,.97);
       backdrop-filter: blur(8px);
       border-bottom: 1px solid rgba(0,0,0,.08);
       padding: 14px 5%;
@@ -56,7 +56,7 @@
     /* ─── HERO ─── */
     #hero {
       min-height: 100vh;
-      background: linear-gradient(160deg, #2d4a1e 0%, #5a3e1b 50%, #c0622f 100%);
+      background: linear-gradient(160deg, #1a4f8a 0%, #1a7fd4 55%, #26c281 100%);
       display: flex; flex-direction: column; align-items: center; justify-content: center;
       text-align: center; padding: 120px 5% 80px;
       position: relative; overflow: hidden;
@@ -108,7 +108,7 @@
       display: inline-block;
       font-size: .82rem; font-weight: 700; letter-spacing: .1em;
       text-transform: uppercase; color: var(--terra);
-      background: rgba(192,98,47,.1); border-radius: 20px;
+      background: rgba(26,127,212,.1); border-radius: 20px;
       padding: 5px 14px; margin-bottom: 14px;
     }
     h2 {
@@ -146,32 +146,72 @@
       width: 58px; height: 58px; border-radius: 14px;
       display: flex; align-items: center; justify-content: center;
       font-size: 1.8rem; margin-bottom: 18px;
-      background: linear-gradient(135deg, var(--terra), #e07840);
+      background: linear-gradient(135deg, var(--terra), var(--olive));
     }
     .benefit-card h3 { font-size: 1.15rem; font-weight: 700; margin-bottom: 10px; }
     .benefit-card p { color: var(--mid); font-size: .95rem; }
 
-    /* ─── GALLERY ─── */
+    /* ─── GALLERY / CAROUSEL ─── */
     #gallery { background: var(--dark); color: var(--light); }
     #gallery .section-label { color: #f9d47a; background: rgba(249,212,122,.15); }
     #gallery h2 { color: var(--light); }
     #gallery .subtitle { color: rgba(255,255,255,.65); }
-    .gallery-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      grid-template-rows: 220px 220px;
-      gap: 14px;
+
+    .carousel-container {
+      position: relative;
+      overflow: hidden;
+      border-radius: var(--radius);
+      max-width: 900px;
+      margin: 0 auto;
+      aspect-ratio: 16/9;
     }
-    .gallery-item {
-      border-radius: var(--radius); overflow: hidden;
-      background: rgba(255,255,255,.07);
-      transition: transform .2s;
+    .carousel-track {
+      display: flex;
+      height: 100%;
+      transition: transform .45s cubic-bezier(.4,0,.2,1);
     }
-    .gallery-item:hover { transform: scale(1.02); }
-    .gallery-item.large { grid-row: span 2; }
-    .gallery-item img {
+    .carousel-slide {
+      min-width: 100%;
+      height: 100%;
+    }
+    .carousel-slide img {
       width: 100%; height: 100%; object-fit: cover; display: block;
     }
+    .carousel-btn {
+      position: absolute; top: 50%; transform: translateY(-50%);
+      background: rgba(0,0,0,.45); color: #fff;
+      border: none; border-radius: 50%;
+      width: 48px; height: 48px; font-size: 1.6rem;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      z-index: 10; transition: background .2s;
+    }
+    .carousel-btn:hover { background: rgba(0,0,0,.7); }
+    .carousel-btn.prev { right: 14px; }
+    .carousel-btn.next { left: 14px; }
+    .carousel-dots {
+      display: flex; justify-content: center; gap: 8px;
+      margin-top: 16px; flex-wrap: wrap;
+    }
+    .carousel-dot {
+      width: 10px; height: 10px; border-radius: 50%;
+      background: rgba(255,255,255,.35); border: none; cursor: pointer;
+      transition: background .2s, transform .2s;
+    }
+    .carousel-dot.active {
+      background: #f9d47a; transform: scale(1.3);
+    }
+
+    /* ─── VIDEO ─── */
+    #video { background: var(--sand); text-align: center; }
+    .video-wrapper {
+      max-width: 720px; margin: 0 auto;
+      border-radius: var(--radius); overflow: hidden;
+      box-shadow: var(--shadow);
+      background: #000;
+      min-height: 405px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .video-wrapper .fb-video { width: 100%; }
 
     /* ─── ABOUT ─── */
     #about { background: var(--light); }
@@ -216,7 +256,7 @@
     .testi-author { display: flex; align-items: center; gap: 12px; }
     .author-avatar {
       width: 44px; height: 44px; border-radius: 50%;
-      background: linear-gradient(135deg, var(--terra), #e07840);
+      background: linear-gradient(135deg, var(--terra), var(--olive));
       display: flex; align-items: center; justify-content: center;
       font-size: 1.1rem; font-weight: 700; color: #fff;
     }
@@ -224,7 +264,7 @@
     .author-role { font-size: .82rem; color: var(--mid); }
 
     /* ─── CONTACT ─── */
-    #contact { background: linear-gradient(160deg, #2d4a1e 0%, #5a3e1b 100%); color: #fff; }
+    #contact { background: linear-gradient(160deg, #1a4f8a 0%, #1a7fd4 100%); color: #fff; }
     #contact .section-label { color: #f9d47a; background: rgba(249,212,122,.15); }
     #contact h2 { color: #fff; }
     #contact .subtitle { color: rgba(255,255,255,.75); margin-bottom: 40px; }
@@ -281,19 +321,22 @@
       .about-inner,
       .contact-inner,
       .testi-grid { grid-template-columns: 1fr; }
-      .gallery-grid { grid-template-columns: 1fr 1fr; grid-template-rows: auto; }
-      .gallery-item.large { grid-row: span 1; }
       .about-photo { aspect-ratio: 16/9; max-width: 100%; }
       .nav-links { display: none; }
     }
     @media (max-width: 600px) {
-      .gallery-grid { grid-template-columns: 1fr; }
       .hero-stats { gap: 24px; }
       nav { padding: 12px 4%; }
+      .carousel-btn { width: 38px; height: 38px; font-size: 1.2rem; }
     }
   </style>
 </head>
 <body>
+
+<div id="fb-root"></div>
+<script async defer crossorigin="anonymous"
+  src="https://connect.facebook.net/he_IL/sdk.js#xfbml=1&version=v18.0">
+</script>
 
 <!-- ─── NAV ─── -->
 <nav>
@@ -301,6 +344,7 @@
   <div class="nav-links">
     <a href="#solution">הפתרון</a>
     <a href="#benefits">יתרונות</a>
+    <a href="#video">סרטון</a>
     <a href="#about">על גלי</a>
     <a href="#testimonials">המלצות</a>
   </div>
@@ -316,7 +360,7 @@
   <div class="hero-stats">
     <div class="stat"><strong>א'</strong><span>רמת אולפן ומעלה</span></div>
     <div class="stat"><strong>100%</strong><span>עברית קלה ונגישה</span></div>
-    <div class="stat"><strong>אזורי סיורים</strong><span>מרכז הארץ, שפלת יהודה, אזורים נוספים</span></div>
+    <div class="stat"><strong>3 סוגי סיור</strong><span>עירוני, תרבותי, טבע ומורשת</span></div>
   </div>
 </section>
 
@@ -328,7 +372,7 @@
     <p class="subtitle">קליטה מוצלחת מחייבת שליטה בשפה לצד חיבור רגשי להיסטוריה ולסביבה.</p>
     <div class="solution-grid">
       <div class="sol-card problem">
-        <div class="icon">😓</div>
+        <div class="icon">🌱</div>
         <h3>האתגר הקיים</h3>
         <p>עולים רבים לומדים עברית בכיתה אך מתקשים ליישם אותה בחיי היומיום. הפער בין השפה הנלמדת למציאות בשטח יוצר תסכול ומעכב את הקליטה.</p>
       </div>
@@ -340,12 +384,17 @@
       <div class="sol-card">
         <div class="icon">🏙️</div>
         <h3>סיורים עירוניים</h3>
-        <p>טיולים בערים ומרכזי עסקים, תוך היכרות עם השפה היומיומית, השילוט והווי מקומי.</p>
+        <p>טיולים בתל אביב, ירושלים וחיפה – היכרות עם השפה היומיומית, השילוט וההווי העירוני הייחודי של כל עיר.</p>
       </div>
       <div class="sol-card">
+        <div class="icon">🕌</div>
+        <h3>סיורים תרבותיים</h3>
+        <p>היכרות מעמיקה עם קהילות, דתות וקבוצות מיעוט בישראל – גשר בין עולמות ושפות בתוך הפסיפס הישראלי.</p>
+      </div>
+      <div class="sol-card" style="grid-column: 1 / -1;">
         <div class="icon">🌿</div>
-        <h3>סיורי היסטוריה וטבע</h3>
-        <p>מסלולים בשפלת יהודה ואתרי מורשת, המחברים בין השפה לשורשים ולנוף הארץ.</p>
+        <h3>סיורי טבע ומורשת</h3>
+        <p>טיולים בנוף הישראלי עם עצירות בצמתים היסטוריים ואתרי מורשת – חיבור בין השפה לשורשים ולאדמה.</p>
       </div>
     </div>
   </div>
@@ -371,7 +420,7 @@
       <div class="benefit-card">
         <div class="benefit-icon">💪</div>
         <h3>ביטחון עצמי לעולה</h3>
-        <p>העולים גלים שהם מסוגלים להבין עברית גם מחוץ לכיתה – תגלית שמשנה את כל תהליך הקליטה.</p>
+        <p>העולים מגלים שהם מסוגלים להבין עברית גם מחוץ לכיתה – תגלית שמשנה את כל תהליך הקליטה.</p>
       </div>
       <div class="benefit-card">
         <div class="benefit-icon">🎯</div>
@@ -381,7 +430,7 @@
       <div class="benefit-card">
         <div class="benefit-icon">📍</div>
         <h3>מגוון אזורי סיורים</h3>
-        <p>מומחיות מעמיקה באזור המרכז ואזורים נוספים – מסלולים ייחודיים עם ידע היסטורי ותרבותי עשיר</p>
+        <p>סיורים עירוניים בתל אביב, ירושלים וחיפה, סיורים תרבותיים בקרב קהילות מגוונות, וסיורי טבע ומורשת ברחבי הארץ.</p>
       </div>
       <div class="benefit-card">
         <div class="benefit-icon">🎓</div>
@@ -398,12 +447,46 @@
     <span class="section-label">גלריה</span>
     <h2>חוויות מהשטח</h2>
     <p class="subtitle">תמונות מהסיורים – עולים, נופים, ורגעים של חיבור.</p>
-    <div class="gallery-grid">
-      <div class="gallery-item large"><img src="1.jpeg" alt="סיור עם קבוצה" /></div>
-      <div class="gallery-item"><img src="2.jpeg" alt="נוף שפלת יהודה" /></div>
-      <div class="gallery-item"><img src="3.jpeg" alt="אתר היסטורי" /></div>
-      <div class="gallery-item"><img src="4.jpeg" alt="עולים בסיור" /></div>
-      <div class="gallery-item"><img src="galy.jpg" alt="גלי בהדרכה" /></div>
+    <div class="carousel-container" dir="ltr">
+      <div class="carousel-track" id="carouselTrack">
+        <div class="carousel-slide"><img src="1.jpg" alt="סיור 1" /></div>
+        <div class="carousel-slide"><img src="2.jpg" alt="סיור 2" /></div>
+        <div class="carousel-slide"><img src="3.jpg" alt="סיור 3" /></div>
+        <div class="carousel-slide"><img src="4.jpg" alt="סיור 4" /></div>
+        <div class="carousel-slide"><img src="5.jpg" alt="סיור 5" /></div>
+        <div class="carousel-slide"><img src="6.jpg" alt="סיור 6" /></div>
+        <div class="carousel-slide"><img src="7.jpg" alt="סיור 7" /></div>
+        <div class="carousel-slide"><img src="8.jpg" alt="סיור 8" /></div>
+        <div class="carousel-slide"><img src="9.jpg" alt="סיור 9" /></div>
+        <div class="carousel-slide"><img src="10.jpg" alt="סיור 10" /></div>
+        <div class="carousel-slide"><img src="11.jpg" alt="סיור 11" /></div>
+        <div class="carousel-slide"><img src="12.jpg" alt="סיור 12" /></div>
+        <div class="carousel-slide"><img src="13.jpg" alt="סיור 13" /></div>
+        <div class="carousel-slide"><img src="14.jpg" alt="סיור 14" /></div>
+        <div class="carousel-slide"><img src="15.jpg" alt="סיור 15" /></div>
+        <div class="carousel-slide"><img src="16.jpg" alt="סיור 16" /></div>
+        <div class="carousel-slide"><img src="17.jpg" alt="סיור 17" /></div>
+      </div>
+      <button class="carousel-btn prev" id="prevBtn">&#8250;</button>
+      <button class="carousel-btn next" id="nextBtn">&#8249;</button>
+    </div>
+    <div class="carousel-dots" id="carouselDots"></div>
+  </div>
+</section>
+
+<!-- ─── VIDEO ─── -->
+<section id="video">
+  <div style="max-width:1100px; margin:auto;">
+    <span class="section-label">צפו בפעולה</span>
+    <h2>סיור עם עולים מאולפן גורדון</h2>
+    <p class="subtitle">ראו איך נראית חוויה אמיתית של סיור בעברית קלה.</p>
+    <div class="video-wrapper">
+      <div class="fb-video"
+           data-href="https://www.facebook.com/watch/?v=2736641316675357"
+           data-width="720"
+           data-show-text="false"
+           data-allowfullscreen="true">
+      </div>
     </div>
   </div>
 </section>
@@ -422,7 +505,7 @@
         <p class="about-text">ההדרכה של גלי חווייתית, מונגשת שפתית, ומותאמת תמיד לקבוצה הספציפית שמולה.</p>
         <div class="about-tags">
           <span class="tag">🎓 מורת דרך מוסמכת</span>
-          <span class="tag">📍 איזורי סיור מגוונים</span>
+          <span class="tag">📍 אזורי סיור מגוונים</span>
           <span class="tag">🗣️ עברית קלה ונגישה</span>
           <span class="tag">👥 קבוצות עולים</span>
         </div>
@@ -498,7 +581,7 @@
         </div>
         <div class="contact-detail">
           <div class="icon-wrap">🗺️</div>
-          <div>אזורי פעילות<br /><span style="color:rgba(255,255,255,.7)">מרכז ושפלת יהודה</span></div>
+          <div>אזורי פעילות<br /><span style="color:rgba(255,255,255,.7)">תל אביב, ירושלים, חיפה ועוד</span></div>
         </div>
       </div>
       <form class="contact-form" action="https://formspree.io/f/gali.benin@gmail.com" method="POST">
@@ -532,6 +615,40 @@
 </footer>
 
 <script>
+  // ─── CAROUSEL ───
+  (function() {
+    const track = document.getElementById('carouselTrack');
+    const dotsContainer = document.getElementById('carouselDots');
+    const slides = track ? track.querySelectorAll('.carousel-slide') : [];
+    const total = slides.length;
+    let current = 0;
+    let autoTimer;
+
+    if (!track || total === 0) return;
+
+    // Build dots
+    slides.forEach((_, i) => {
+      const dot = document.createElement('button');
+      dot.className = 'carousel-dot' + (i === 0 ? ' active' : '');
+      dot.addEventListener('click', () => goTo(i));
+      dotsContainer.appendChild(dot);
+    });
+
+    function goTo(n) {
+      current = (n + total) % total;
+      track.style.transform = 'translateX(-' + (current * 100) + '%)';
+      dotsContainer.querySelectorAll('.carousel-dot').forEach((d, i) => {
+        d.classList.toggle('active', i === current);
+      });
+    }
+
+    document.getElementById('prevBtn').addEventListener('click', () => { goTo(current - 1); resetTimer(); });
+    document.getElementById('nextBtn').addEventListener('click', () => { goTo(current + 1); resetTimer(); });
+
+    function resetTimer() { clearInterval(autoTimer); autoTimer = setInterval(() => goTo(current + 1), 4000); }
+    resetTimer();
+  })();
+
   // Smooth scroll offset for fixed nav
   document.querySelectorAll('a[href^="#"]').forEach(a => {
     a.addEventListener('click', e => {
