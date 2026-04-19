@@ -300,49 +300,25 @@
       line-height: 1.6;
     }
 
-    /* ─── PROMO PLACEHOLDER ─── */
+    /* ─── PROMO VIDEO ─── */
     .promo-section {
       text-align: center;
     }
 
-    .promo-placeholder-box {
-      max-width: 680px;
+    .promo-video-wrap {
+      max-width: 360px;
       margin: 0 auto 28px;
-      border: 2px dashed rgba(232,114,42,0.35);
-      border-radius: 12px;
-      padding: 60px 32px;
-      background: rgba(26,46,74,0.5);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 14px;
-      color: var(--muted);
-    }
-
-    .promo-icon {
-      width: 56px;
-      height: 56px;
-      border-radius: 50%;
-      background: rgba(232,114,42,0.12);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 8px 40px rgba(232,114,42,0.25);
       border: 1px solid rgba(232,114,42,0.3);
-      display: flex;
-      align-items: center;
-      justify-content: center;
     }
 
-    .promo-icon svg {
-      width: 26px;
-      height: 26px;
-      fill: var(--orange);
-      opacity: 0.7;
-    }
-
-    .promo-placeholder-text {
-      font-size: 0.88rem;
-      color: rgba(176,196,222,0.6);
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      font-weight: 600;
+    .promo-video-wrap iframe {
+      display: block;
+      width: 100%;
+      aspect-ratio: 9 / 16;
+      border: 0;
     }
 
     .promo-subtitle {
@@ -646,14 +622,14 @@ fbq('track', 'PageView');
       <h2 class="section-title">Хотите большего?</h2>
     </div>
 
-    <div class="promo-placeholder-box reveal" aria-label="Место для промо-видео">
-      <div class="promo-icon" aria-hidden="true">
-        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-          <path d="M8 5v14l11-7z"/>
-        </svg>
-      </div>
-      <span class="promo-placeholder-text">Промо-видео</span>
-      <!-- PROMO VIDEO WILL GO HERE -->
+    <div class="promo-video-wrap reveal">
+      <iframe
+        src="https://www.youtube.com/embed/n2TrDp9gOiI?rel=0&modestbranding=1"
+        title="Промо: Полный курс «Всё о гиюре»"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen
+        loading="lazy">
+      </iframe>
     </div>
 
     <p class="promo-subtitle reveal">
